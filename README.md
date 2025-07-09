@@ -1,6 +1,6 @@
 ## README file
 
-PCB-Aerobic-Bioaugmentation-Study2
+Portland Harbor Airborne PCB Project
 This model simulates the concentration of congener-specific PCBs in both the aqueous and gas phases within laboratory-scale bioreactors containing PCB-contaminated sediment. The script incorporates experimental passive sampler measurements and uses a least-squares minimization approach to estimate congener-specific sampling rates for both passive samplers.
 
 Additionally, the model can simulate the reduction in volatile PCB release from sediment to air due to the presence of an aerobic PCB-degrading microorganism, with a known biotransformation rate for PCBs.
@@ -9,15 +9,15 @@ SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
 Licenses/restrictions: licensed under the 2-Clause BSD License - see the LICENSE file for details.
 
 General Information
-Deposit Title: Polychlorinated Biphenyl (PCB) Reactive Transport Model
+Deposit Title: Portland Harbor Airborne PCB Project
 
-This README file was generated on March 10, 2025 by Andres Martinez.
+This README file was generated on July 7, 2025 by Andres Martinez.
 
 Contributor information:
 
 Andres Martinez, PhD University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) andres-martinez@uiowa.edu ORCID: 0000-0002-0572-1494
 
-Principal Investigator: Timothy Mattes, PhD Principal Investigator email: tim-mattes@uiowa.edu
+Principal Investigator: Keri Hornbuckle, PhD Principal Investigator email: keri-hornbuckle@uiowa.edu
 
 Date of Data Collection:
 
