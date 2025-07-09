@@ -1,0 +1,13 @@
+# Create subfolder within the current working directory
+dir.create("R")
+dir.create("R/Flux")
+dir.create("R/ReadData")
+dir.create("R/Water")
+dir.create("R/Air")
+dir.create("Data")
+dir.create("Output")
+dir.create("Output/Data")
+dir.create("Output/Data/csv")
+dir.create("Output/Figures")
+dir.create("Output/Figures/Plots")
+dir.create("Output/Figures/Maps")
