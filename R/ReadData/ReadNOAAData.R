@@ -1,11 +1,12 @@
 # Code to read NOAA meteorological data
+# to be used for flux calculations
 # https://docs.ropensci.org/rnoaa/articles/rnoaa.html
 # Documentation:
 # https://www.ncei.noaa.gov/data/global-hourly/doc/isd-format-document.pdf
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
-install.packages("rnoaa")
+install.packages("rnoaa") # For future use, noaaweather package will need to be installed it.
 install.packages("leaflet")
 install.packages("dplyr")
 install.packages("stringr")

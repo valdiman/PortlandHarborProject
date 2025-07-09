@@ -1,4 +1,5 @@
 # Read and retrieve data from USGS
+# to be used for flux calculations
 
 # Install package
 install.packages("dataRetrieval")
@@ -7,6 +8,8 @@ install.packages("dataRetrieval")
 library(dataRetrieval) # read data from USGS
 
 # Read data from USGS station
+# Define station and parameter
+# Need to use read_waterdata_daily in the future
 USGSPH <- "14211720" # Station @ WILLAMETTE RIVER AT PORTLAND, OR
 # Water temperature in C
 # August 2018
