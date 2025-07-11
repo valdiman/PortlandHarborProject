@@ -31,6 +31,8 @@ wc.raw <- read.csv("Data/WaterConcentration.csv", header = T)
   #Then turn it back into a factor with the levels in the correct order
   prof.ave$congener <- factor(prof.ave$congener,
                               levels = unique(prof.ave$congener))
+  # Save average profile data
+  write.csv(prof.ave, file = "Output/Data/csv/AveProfWater.csv")
 }
 
 # PCB Profile plot
