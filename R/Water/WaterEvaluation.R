@@ -1,4 +1,5 @@
 # Evaluate Portland water PCB data
+# Maps and plots are not included in the paper nor SI
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
@@ -41,7 +42,7 @@ PCB.PO$SampleDate2 <- format(PCB.PO$SampleDate2, "%Y-%m")
 # Create a square map around samples
 PO.box <- make_bbox(lon = PCB.PO$Longitude, lat = PCB.PO$Latitude,
                     f = 0.8)
-PO.map <- get_stamenmap(bbox = PO.box, zoom = 10)
+PO.map <- get_stamenmap(bbox = PO.box, zoom = 10) # This function is not working anymore
 # Average PCB per site
 pcb4.av <- aggregate(PCB4 ~ Site + Latitude + Longitude,
                      data = PCB.PO, FUN = mean)
