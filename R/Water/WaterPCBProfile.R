@@ -15,7 +15,7 @@ wc.raw <- read.csv("Data/WaterConcentration.csv", header = T)
 # Create average PCB congener profiles
 # (1) Water samples
 {
-  wc.1 <- -wc.raw[, -(1:7)]  # Remove metadata
+  wc.1 <- wc.raw[, -(1:7)]  # Remove metadata
   tmp <- rowSums(wc.1, na.rm = TRUE)
   prof <- sweep(wc.1, 1, tmp, FUN = "/")
   prof.ave <- data.frame(colMeans(prof, na.rm = TRUE))
