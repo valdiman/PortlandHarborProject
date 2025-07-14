@@ -1,4 +1,5 @@
-# Emission PCB profile Plot. Figure 3 (C) from paper
+# Flux PCB profile Plot. Figure 3 (C) from paper
+# Data not normalized to the sum.
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
