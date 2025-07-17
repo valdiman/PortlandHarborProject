@@ -113,8 +113,8 @@ wc.raw <- read.csv("Data/WaterConcentrationV02.csv")
 # (3) Average of the three highest samples
 # This approach was used in the paper to estimate emissions
 # and used in AERMOD
-# WCPCB_OR-POH003 8/22/18, WCPCB_OR-POH004 8/21/18 &
-# WCPCB_OR-POH005 8/23/18
+# WCPCB_OR-POH003 8/22/18, WCPCB_OR-POH004 8/23/18 &
+# WCPCB_OR-POH005 8/21/18
 {
   wc.hi <- wc.2[c(7, 10, 13), 2:160]
   C.PCB.water.hi.ave <- sapply(wc.hi, mean)
