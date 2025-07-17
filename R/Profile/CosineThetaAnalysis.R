@@ -17,7 +17,7 @@ prof.air <- read.csv("Output/Data/csv/ProfAir.csv", header = TRUE,
 prof.aroclor <- read.csv("Data/FrameAroclor_173list.csv", header = TRUE,
                 check.names = FALSE)
 # Water profile
-prof.water <- read.csv("Output/Data/csv/AveProfWater.csv", header = TRUE,
+prof.water <- read.csv("Output/Data/csv/AveProf3HWater.csv", header = TRUE,
                        check.names = FALSE)
 # Flux profile
 prof.flux <- read.csv("Output/Data/csv/PCBFlux.csv", header = TRUE,
