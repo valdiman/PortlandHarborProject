@@ -8,18 +8,19 @@ install.packages("ggplot2")
 library(ggplot2)
 
 # Read data ---------------------------------------------------------------
-air.raw <- read.csv("Data/AirConc.csv",header = T)
+air.raw <- read.csv("Data/AirConcV2.csv", check.names = FALSE, header = TRUE)
+# Remove metadata
+air <- air.raw[, 7:179]
 
 # Create Profile ----------------------------------------------------------
 # All Air samples
 {
-  air.1 <- subset(air.raw, select = -c(sid))
-  tmp <- rowSums(air.1, na.rm = TRUE)
-  prof <- sweep(air.1, 1, tmp, FUN = "/")
+  tmp <- rowSums(air, na.rm = TRUE)
+  prof <- sweep(air, 1, tmp, FUN = "/")
   # Add back sample site location
-  prof.1 <- cbind(sid = air.raw$sid, prof)
+  prof.1 <- cbind(sid = air.raw$Event, prof)
   # Save profile data
-  write.csv(prof.1, file = "Output/Data/csv/ProfAir.csv")
+  write.csv(prof.1, file = "Output/Data/csv/ProfAirV2.csv")
   prof.ave <- data.frame(colMeans(prof, na.rm = TRUE))
   colnames(prof.ave) <- c("mean")
   prof.sd <- data.frame(apply(prof, 2, sd, na.rm = TRUE))
@@ -70,7 +71,7 @@ plotavgproferror <- ggplot(prof.ave, aes(x = congener, y = mean)) +
 print(plotavgproferror)
 
 # Save plot
-ggsave("Output/Plots/AvgAirProfFig3A.png", plot = plotavgproferror, width = 10,
+ggsave("Output/Plots/AvgAirProfFig3AV2.png", plot = plotavgproferror, width = 10,
        height = 5, dpi = 500)
 
 
