@@ -13,7 +13,7 @@ library(ggplot2)
 PCBemission <- read.csv("Output/Data/csv/PCBFlux.csv", header = T,
                         check.names = F)
 
-# Create PCB profile plot -------------------------------------------------
+# Create PCB concentration profile plot -----------------------------------
 PCBemission$Congener <- as.character(PCBemission$Congener)
 # Then turn it back into a factor with the levels in the correct order
 PCBemission$Congener <- factor(PCBemission$Congener,
@@ -63,3 +63,20 @@ print(p1)
 ggsave("Output/Plots/FluxProfFig3C.png", plot = p1, width = 10,
        height = 5, dpi = 500)
 
+# Create Flux Profile (normalized) ----------------------------------------
+prof.flux <- data.frame(
+  Congener = PCBemission$Congener,
+  MeanFlux = PCBemission$`Mean (ng/m2/d)`
+)
+
+prof.flux$Congener <- as.character(prof.flux$Congener)
+prof.flux.named <- setNames(prof.flux$MeanFlux, prof.flux$Congener)
+prof.flux <- as.data.frame(t(prof.flux.named))
+
+# Create profile
+tmp <- rowSums(prof.flux, na.rm = TRUE)
+prof <- sweep(prof.flux, 1, tmp, FUN = "/")
+# Add back sample site location
+prof.1 <- cbind(sid = "flux", prof)
+# Save profile data
+write.csv(prof.1, file = "Output/Data/csv/ProfFluxV2.csv")
