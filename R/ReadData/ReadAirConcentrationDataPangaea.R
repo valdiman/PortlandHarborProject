@@ -1,15 +1,5 @@
 # R code to download and format data from Pangaea
-
-# Packages and libraries needed -------------------------------------------------------------------
-# Install packages
-install.packages('pangaear')
-# Library
-library(pangaear) # Read data from Pangaea
-
-# Read data from Pangaea and format data ------------------------------
-
-# Read data from Pangaea repository
-# Citation:
+# Reference
 # Slade, Alexis; Martinez, Andres; Mathieu-Campbell, Martine;
 # Watkins, Shannon; Cohen, Cassie; Hornbuckle, Keri C (2025):
 # Airborne polychlorinated biphenyl congener concentrations using
@@ -17,6 +7,14 @@ library(pangaear) # Read data from Pangaea
 # [dataset publication series]. [dataset].  PANGAEA, https://doi.pangaea.de/10.1594/PANGAEA.983837
 # final doi: https://doi.org/10.1594/PANGAEA.983837
 
+# Packages and libraries needed -------------------------------------------------------------------
+# Install packages
+install.packages('pangaear')
+
+# Library
+library(pangaear) # Read data from Pangaea
+
+# Read data from Pangaea and format data ------------------------------
 # Set cache path to the project folder
 pg_cache$cache_path_set(full_path = "Data/")
 # Download original datasets from Pangaea
