@@ -17,142 +17,83 @@ install.packages("SnowballC")
 
 # Read data ---------------------------------------------------------------
 # Air profiles
-prof.air <- read.csv("Output/Data/csv/ProfAirV2.csv", header = TRUE,
+prof.airV0 <- read.csv("Output/Data/csv/ProfAirV2.csv", header = TRUE,
                      check.names = FALSE)
+
 # Water profile
 prof.waterV0 <- read.csv("Output/Data/csv/AveProf3HWater.csv", header = TRUE,
                        check.names = FALSE)
 
-prof.water <- as.data.frame(t(prof.waterV0$mean))
-colnames(prof.water) <- prof.waterV0$congener
-
 # Flux profile
-prof.fluxV0 <- read.csv("Output/Data/csv/PCBFlux.csv", header = TRUE,
+prof.flux <- read.csv("Output/Data/csv/ProfFluxV2.csv", header = TRUE,
                        check.names = FALSE)
 
-prof.flux <- as.data.frame(t(prof.fluxV0$`Mean (ng/m2/d)`))
-colnames(prof.flux) <- prof.fluxV0$Congener
+# Sediment profile
+# Reference
+# Megson, D.; Tiktak, G. P.; Shideler, S.; Dereviankin, M.; Harbicht, L.; Sandau, C. D.
+# Source apportionment of polychlorinated biphenyls (PCBs) using different receptor
+# models: A case study on sediment from the Portland Harbor Superfund Site (PHSS),
+# Oregon, USA. Sci Total Environ 2023, 872, 162231-162231. DOI: 10.1016/j.scitotenv.2023.162231.
 
+prof.sed <- c(
+  PCB1 = 0.0007367, PCB2 = 0.0008361, PCB3 = 0.0006725, PCB4 = 0.0024747,
+  PCB5 = 0.0001939, PCB6 = 0.0009155, PCB7 = 0.0003126, PCB8 = 0.0032126,
+  PCB9 = 0.0003554, PCB10 = 0.0002823, PCB11 = 0.0070996, "PCB12+13" = 0.0006503,
+  PCB14 = 0.0000012, PCB15 = 0.0028007, PCB16 = 0.0021153, PCB17 = 0.0035225,
+  "PCB18+30" = 0.0056554, PCB19 = 0.0023178, "PCB20+28" = 0.0125387, "PCB21+33" = 0.0048459,
+  PCB22 = 0.0033769, PCB23 = 0.000001, PCB24 = 0.0000938, PCB25 = 0.0011365,
+  "PCB26+29" = 0.0020167, PCB27 = 0.0006917, PCB31 = 0.009014, PCB32 = 0.0024665,
+  PCB34 = 0.0001307, PCB35 = 0.0002415, PCB36 = 0.0000081, PCB37 = 0.0035675,
+  PCB38 = 0.0000015, PCB39 = 0.0001154, "PCB40+41+71" = 0.0080236, PCB42 = 0.0038511,
+  "PCB43+73" = 0.0006695, "PCB44+47+65" = 0.0215279, "PCB45+51" = 0.0046507, PCB46 = 0.0008194,
+  PCB48 = 0.0023382, "PCB49+69" = 0.0134133, "PCB50+53" = 0.0038605, PCB52 = 0.0255205,
+  PCB54 = 0.0005625, PCB55 = 0.0002814, PCB56 = 0.0062196, PCB57 = 0.0000052,
+  PCB58 = 0.0001343, "PCB59+62+75" = 0.0013262, PCB60 = 0.0024681,
+  "PCB61+70+74+76" = 0.0267053, PCB63 = 0.0004777, PCB64 = 0.0061092, PCB66 = 0.0161404,
+  PCB67 = 0.0003161, PCB68 = 0.0003674, PCB72 = 0.0003518, PCB77 = 0.0015997,
+  PCB78 = 0.0000006, PCB79 = 0.0002568, PCB80 = 0.000002, PCB81 = 0.0000057,
+  PCB82 = 0.0038266, "PCB83+99" = 0.0243089, PCB84 = 0.0085047,
+  "PCB85+116+117" = 0.0061256, "PCB86+87+97+109+119+125" = 0.0221996,
+  "PCB88+91" = 0.0065828, PCB89 = 0.0001726, "PCB90+101+113" = 0.03983,
+  PCB92 = 0.0078989, "PCB93+95+98+100+102" = 0.0353616, PCB94 = 0.0003198,
+  PCB96 = 0.0003659, PCB103 = 0.0010244, PCB104 = 0.0000428, PCB105 = 0.0112381,
+  PCB106 = 0.0000004, PCB107 = 0.0027438, "PCB108+124" = 0.0010763,
+  "PCB110+115" = 0.0419881, PCB111 = 0.0000684, PCB112 = 0.0001439,
+  PCB114 = 0.0005495, PCB118 = 0.0299942, PCB120 = 0.0002473, PCB121 = 0.0000128,
+  PCB122 = 0.0004085, PCB123 = 0.0004687, PCB126 = 0.0001874, PCB127 = 0.0000013,
+  "PCB128+166" = 0.0083572, "PCB129+138+160+163" = 0.0637296, PCB130 = 0.0037366,
+  PCB131 = 0.0004619, PCB132 = 0.0189934, PCB133 = 0.0012237,
+  "PCB134+143" = 0.0030983, "PCB135+151+154" = 0.02345, PCB136 = 0.0076645,
+  PCB137 = 0.0020518, "PCB139+140" = 0.0007857, PCB141 = 0.0118224,
+  PCB142 = 0.0000089, PCB144 = 0.0022671, PCB145 = 0.0000265, PCB146 = 0.011693,
+  "PCB147+149" = 0.0570637, PCB148 = 0.0002128, PCB150 = 0.0002111, PCB152 = 0.0000716,
+  "PCB153+168" = 0.0561245, PCB155 = 0.0000296, "PCB156+157" = 0.0056686,
+  PCB158 = 0.0055696, PCB159 = 0.0005273, PCB161 = 0.0000001, PCB162 = 0.000168,
+  PCB164 = 0.0044045, PCB165 = 0.0000012, PCB167 = 0.0019482, PCB169 = 0.0000317,
+  PCB170 = 0.0199342, "PCB171+173" = 0.0059292, PCB172 = 0.0033327,
+  PCB174 = 0.0209134, PCB175 = 0.00072, PCB176 = 0.0023279, PCB177 = 0.0123562,
+  PCB178 = 0.0045556, PCB179 = 0.0092869, "PCB180+193" = 0.0432392, PCB181 = 0.0001956,
+  PCB182 = 0.0001621, "PCB183+185" = 0.0138407, PCB184 = 0.0000099,
+  PCB186 = 0.0000015, PCB187 = 0.0268972, PCB188 = 0.0000089, PCB189 = 0.0006364,
+  PCB190 = 0.0036982, PCB191 = 0.0007512, PCB192 = 0.0000053, PCB194 = 0.0109723,
+  PCB195 = 0.0046487, PCB196 = 0.0048463, "PCB197+200" = 0.0015101,
+  "PCB198+199" = 0.0118487, PCB201 = 0.0012163, PCB202 = 0.0024236,
+  PCB203 = 0.0069798, PCB204 = 0.0000046, PCB205 = 0.0005315, PCB206 = 0.0132315,
+  PCB207 = 0.0007562, PCB208 = 0.0026805, PCB209 = 0.0100448
+)
 
-prof.sed <- c(PCB1 = 0.0124485, PCB2 = 0.0019972, PCB3 = 0.0053013, PCB4 = 0.0371992,
-               PCB5 = 0.0011788, PCB6 = 0.0103043, PCB7 = 0.0020843, PCB8 = 0.0441581,
-               PCB9 = 0.0037055, PCB10 = 0.0013225, PCB11 = 0.0379037, "PCB12+13" = 0.0017622,
-               PCB14 = 0.0001615, PCB15 = 0.0088529, PCB16 = 0.0162889, PCB17 = 0.0158909,
-               "PCB18+30" = 0.0376301, PCB19 = 0.0072553, "PCB20+28" = 0.0286944,
-               "PCB21+33" = 0.0171805, PCB22 = 0.011106, PCB23 = 0.0001978, PCB24 = 0.0005876,
-               PCB25 = 0.0025587, "PCB26+29" = 0.0056595, PCB27 = 0.0023477,
-               PCB31 = 0.0276946, PCB32 = 0.0105714, PCB34 = 0.0002603, PCB35 = 0.0010778,
-               PCB36 = 0.0001026, PCB37 = 0.0041839, PCB38 = 0.000067, PCB39 = 0.0001053,
-               "PCB40+41+71" = 0.0121065, PCB42 = 0.006208, "PCB43+73" = 0.0154834,
-               "PCB44+47+65" = 0.0286962, "PCB45+51" = 0.008542, PCB46 = 0.0019932,
-               PCB48 = 0.0053341, "PCB49+69" = 0.0162949, "PCB50+53" = 0.0061162,
-               PCB52 = 0.0235105, PCB54 = 0.0003481, PCB55 = 0.0001935, PCB56 = 0.0045778,
-               PCB57 = 0.0005116, PCB58 = 0.0000673, "PCB59+62+75" = 0.0020223, PCB60 = 0.002556,
-               "PCB61+70+74+76" = 0.0292696, PCB63 = 0.0007464, PCB64 = 0.0107667,
-               PCB66 = 0.011903, PCB67 = 0.0004101, PCB68 = 0.0003862, PCB72 = 0.0001805,
-               PCB77 = 0.0008548, PCB78 = 0.0000462, PCB79 = 0.0001717,
-    PCB80 = 0.000135,
-    PCB81 = 0.000321,
-    PCB82 = 0.0022084,
-    "PCB83+99" = 0.0119786,
-    PCB84 = 0.0088211,
-    "PCB85+116+117" = 0.0047041,
-    "PCB86+87+97+109+119+125" = 0.0191365,
-    "PCB88+91" = 0.004878,
-    PCB89 = 0.0003468,
-    "PCB90+101+113" = 0.0338068,
-    PCB92 = 0.0064418,
-    "PCB93+95+98+100+102" = 0.0390176,
-    PCB94 = 0.0002782,
-    PCB96 = 0.0004427,
-    PCB103 = 0.0002945,
-    PCB104 = 0.0000504,
-    PCB105 = 0.0065065,
-    PCB106 = 0.0000823,
-    PCB107 = 0.001121,
-    PCB108 = 0.0008143,
-    "PCB110+115" = 0.0333992,
-    PCB111 = 0.000047,
-    PCB112 = 0.0000392,
-    PCB114 = 0.0004365,
-    PCB118 = 0.0173282,
-    PCB120 = 0.0001811,
-    PCB121 = 0.0000196,
-    PCB122 = 0.0002791,
-    PCB123 = 0.0003258,
-    PCB126 = 0.0000966,
-    PCB127 = 0.0000613,
-    PCB128 = 0.0033094,
-    "PCB129+138+163" = 0.0338735,
-    PCB130 = 0.0018043,
-    PCB131 = 0.0006512,
-    PCB132 = 0.013017,
-    PCB133 = 0.0005924,
-    PCB134 = 0.0024865,
-    "PCB135+151+154" = 0.0194597,
-    PCB136 = 0.0082528,
-    PCB137 = 0.0011158,
-    "PCB139+140" = 0.0006374,
-    PCB141 = 0.0074487,
-    PCB142 = 0.0000684,
-    PCB144 = 0.0029722,
-    PCB145 = 0.0000448,
-    PCB146 = 0.0047038,
-    PCB147 = 0.0380428,
-    "PCB148+149" = 0.0000688,
-    PCB150 = 0.0000961,
-    PCB152 = 0.0000942,
-    "PCB153+168" = 0.0297369,
-    PCB155 = 0.0000547,
-    "PCB156+157" = 0.0023521,
-    PCB158 = 0.0033555,
-    PCB159 = 0.0001636,
-    PCB161 = 0.0000729,
-    PCB162 = 0.0000765,
-    PCB164 = 0.0020785,
-    PCB165 = 0.0000076,
-    PCB167 = 0.0008628,
-    PCB169 = 0.0003088,
-    PCB170 = 0.0040513,
-    PCB171 = 0.0025659,
-    "PCB172+173" = 0.0011277,
-    PCB174 = 0.0092613,
-    PCB175 = 0.0005267,
-    PCB176 = 0.0018508,
-    PCB177 = 0.004492,
-    PCB178 = 0.0022437,
-    PCB179 = 0.0062762,
-    PCB180 = 0.012314,
-    "PCB181+193" = 0.0001953,
-    PCB182 = 0.0004382,
-    PCB183 = 0.0072779,
-    "PCB184+185" = 0.000318,
-    PCB186 = 0.0000554,
-    PCB187 = 0.0131026,
-    PCB188 = 0.0002588,
-    PCB189 = 0.0005153,
-    PCB190 = 0.0008665,
-    PCB191 = 0.0002282,
-    PCB192 = 0.0000386,
-    PCB194 = 0.001596,
-    PCB195 = 0.0006441,
-    PCB196 = 0.001192,
-    "PCB197+200" = 0.0012473,
-    "PCB198+199" = 0.0029903,
-    PCB201 = 0.0005456,
-    PCB202 = 0.00126,
-    PCB203 = 0.0018125,
-    PCB204 = 0,
-    PCB205 = 0.000145,
-    PCB206 = 0.0007922,
-    PCB207 = 0.0002053,
-    PCB208 = 0.0003838,
-    PCB209 = 0.0006354
-  )
+prof.sed <- as.data.frame(t(prof.sed))
+prof.sed <- cbind(sid = "sediment", prof.sed)
 
 # Aroclor profiles
+# Reference
+# Frame, G. M. A collaborative study of 209 PCB congeners and 6 Aroclors on 20
+# different HRGC columns 2. Semi-quantitative Aroclor congener distributions: 2.
+# Semi-quantitative Aroclor congener distributions. Fresenius' journal of
+# analytical chemistry 1997, 357 (6), 714-722. DOI: 10.1007/s002160050238.
+
 prof.aroclor <- data.frame(
-  Aroclor = c("1221 A1", "1232 A1.5", "1232 G1.5", "1016 A2", "1016 S2", 
+  sid = c("1221 A1", "1232 A1.5", "1232 G1.5", "1016 A2", "1016 S2", 
               "1242 A3", "1242 G3", "1242 S3B", "1248 A3.5", "1248 G3.5",
               "1254 A4", "1254 G4", "1260 A5", "1260 S5", "1260 G5",
               "1262 A6", "1262 G6"),
@@ -197,7 +138,7 @@ prof.aroclor <- data.frame(
   `PCB45+51` = c(0.04, 0.59, 0.58, 1.5433, 1.54, 1.18, 1.14, 1.06, 1.3974, 1.2203, 0.0223, 0.049, 0, 0, 0, 0, 0),
   PCB46 = c(0.02, 0.19, 0.19, 0.4855, 0.48, 0.37, 0.38, 0.33, 0.471, 0.3932, 0, 0, 0, 0, 0, 0.01, 0),
   PCB48 = c(0.06, 0.61, 0.62, 1.6105, 1.59, 1.18, 1.17, 1.19, 1.6643, 1.5412, 0.0534, 0.1198, 0, 0, 0, 0.01, 0),
-  PCB49 = c(0.15, 1.37, 1.36, 3.3522, 3.4, 2.59, 2.6, 2.38, 4.1166, 4.1742, 0.265, 1.0958, 0.01, 0.02, 0.01, 0.07, 0.04),
+  'PCB49+69' = c(0.15, 1.37, 1.36, 3.3522, 3.4, 2.59, 2.6, 2.38, 4.1166, 4.1742, 0.265, 1.0958, 0.01, 0.02, 0.01, 0.07, 0.04),
   `PCB50+53` = c(0.04, 0.37, 0.37, 0.9658, 0.95, 0.75, 0.71, 0.68, 1.0506, 0.8778, 0.0432, 0.117, 0, 0, 0, 0, 0),
   `PCB52` = c(0.22, 1.83, 1.86, 4.6335, 4.61, 3.64, 3.47, 3.47, 6.9299, 5.5779, 0.8252, 5.3793, 0.27, 0.25, 0.21, 0.17, 0.11),
   `PCB54` = c(0, 0, 0, 0.0103, 0.02, 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -318,6 +259,10 @@ prof.aroclor <- data.frame(
   check.names = FALSE
 )
 
+# Format Air Profile ------------------------------------------------------
+# Remove first column
+prof.air <- prof.airV0[, -1]
+
 # Need to combine PCB congeners to have the same list over all the profiles
 prof.air$`PCB40+41+71` <- prof.air$`PCB40+71` + prof.air$`PCB41`
 # Remove the original columns
@@ -376,19 +321,75 @@ prof.air$`PCB197+200` <- prof.air$`PCB197` + prof.air$`PCB200`
 # Remove the original columns
 prof.air <- prof.air[, !(names(prof.air) %in% c("PCB197", "PCB200"))]
 
-# water and flux
-# Create the new combined row
-combined_row <- data.frame(
-  congener = "PCB43+73",
-  mean = sum(prof.water$mean[prof.water$congener %in% c("PCB43", "PCB73")]),
-  sd = sum(prof.water$sd[prof.water$congener %in% c("PCB43", "PCB73")])
-)
+prof.air$PCB204 <- 0
 
-# Remove the original rows
-prof.water <- prof.water[!(prof.water$congener %in% c("PCB43", "PCB73")), ]
+# Step 1: Identify PCB columns (those that start with "PCB")
+pcb_cols <- grep("^PCB", names(prof.air), value = TRUE)
 
-# Append the new combined row
-prof.water <- rbind(prof.water, combined_row)
+# Step 2: Extract the first numeric value from each PCB column name
+get_first_number <- function(x) {
+  as.numeric(sub(".*?(\\d+).*", "\\1", x))
+}
+
+# Step 3: Sort the PCB columns by first number
+pcb_cols_sorted <- pcb_cols[order(sapply(pcb_cols, get_first_number))]
+
+# Step 4: Reorder the data frame: sid first, then sorted PCB columns
+prof.air <- prof.air[, c("sid", pcb_cols_sorted)]
+
+# Format Water Profile ----------------------------------------------------
+prof.water <- as.data.frame(t(prof.waterV0$mean))
+colnames(prof.water) <- prof.waterV0$congener
+prof.water <- cbind(sid = "water", prof.water)
+
+# Combine congeners
+prof.water$`PCB43+73` <- prof.water$`PCB43` + prof.water$`PCB73`
+# Remove the original columns
+prof.water <- prof.water[, !(names(prof.water) %in% c("PCB43", "PCB73"))]
+
+# Step 1: Identify PCB columns (those that start with "PCB")
+pcb_cols <- grep("^PCB", names(prof.water), value = TRUE)
+
+# Step 3: Sort the PCB columns by first number
+pcb_cols_sorted <- pcb_cols[order(sapply(pcb_cols, get_first_number))]
+
+# Step 4: Reorder the data frame: sid first, then sorted PCB columns
+prof.water <- prof.water[, c("sid", pcb_cols_sorted)]
+
+# Format Flux Profile -----------------------------------------------------
+# Combine congeners
+prof.flux$`PCB43+73` <- prof.flux$`PCB43` + prof.flux$`PCB73`
+# Remove the original columns
+prof.flux <- prof.flux[, !(names(prof.flux) %in% c("PCB43", "PCB73"))]
+
+# Step 1: Identify PCB columns (those that start with "PCB")
+pcb_cols <- grep("^PCB", names(prof.flux), value = TRUE)
+
+# Step 3: Sort the PCB columns by first number
+pcb_cols_sorted <- pcb_cols[order(sapply(pcb_cols, get_first_number))]
+
+# Step 4: Reorder the data frame: sid first, then sorted PCB columns
+prof.flux <- prof.flux[, c("sid", pcb_cols_sorted)]
+
+write.csv(prof.aroclor, "Output/Data/prof.aroclor.csv")  
+
+
+# Combine all profiles ----------------------------------------------------
+CosineTheta <- rbind(prof.air, prof.water, prof.flux, prof.sed,
+                     prof.aroclor)
+
+rowSums(CosineTheta[, 2:159])
+
+
+
+# Extract the first number from each PCB name
+get_first_number <- function(name) {
+  as.numeric(sub(".*?(\\d+).*", "\\1", name))
+}
+
+# Sort air_congeners by the first number found
+sorted_air_congeners <- air_congeners[order(sapply(prof.air, get_first_number))]
+
 
 
 
@@ -406,10 +407,15 @@ flux_congeners <- grep("^PCB", names(prof.flux), value = TRUE)
 # prof.water: get from congener column
 water_congeners <- grep("^PCB", names(prof.water), value = TRUE)
 
+sed_congeners <- grep("^PCB", names(prof.sed), value = TRUE)
 
 
-# prof.sed: extract names attribute
-sed_congeners <- names(prof.sed)
+setequal(air_congeners, sed_congeners)     # TRUE if equal
+setequal(aroclor_congeners, air_congeners)
+setequal(water_congeners, flux_congeners)
+
+setdiff(air_congeners, aroclor_congeners)
+
 
 
 
