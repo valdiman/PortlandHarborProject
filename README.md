@@ -4,7 +4,8 @@
 The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site. These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the surrounding air of Portland. Additional scripts were developed to visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations, and analyze sample similarities using PCB congener profiles and cosine theta testing.
 
 
-SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
+# SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
+
 Licenses/restrictions: licensed under the 2-Clause BSD License - see the LICENSE file for details.
 
 General Information
@@ -26,7 +27,8 @@ Subject: Polychlorinated Biphenyls; AERMOD; Portland Harbor Superfund Site; Atmo
 
 GeoLocation: Air samplers where collected in Portland, Oregon (45.5051° N, 122.6750° W).
 
-PREREQUISITES & DEPENDENCIES
+# PREREQUISITES & DEPENDENCIES
+
 This section of the ReadMe file lists the necessary software required to run codes in "R".
 
 Software:
@@ -34,7 +36,8 @@ Software:
 Any web browser (e.g., Google Chrome, Microsoft Edge, Mozilla Firefox, etc.)
 R-studio for easily viewing, editing, and executing "R" code as a regular "R script" file: https://www.rstudio.com/products/rstudio/download/
 
-SOFTWARE INSTALLATION
+# SOFTWARE INSTALLATION
+
 This section of the ReadMe file provides short instructions on how to download and install "R Studio". "R Studio" is an open source (no product license required) integrated development environment (IDE) for "R" and completely free to use. To install "R Studio" follow the instructions below:
 
 Visit the following web address: https://www.rstudio.com/products/rstudio/download/
@@ -42,10 +45,11 @@ Click the "download" button beneath RStudio Desktop
 Click the button beneath "Download RStudio Desktop". This will download the correct installation file based on the operating system detected.
 Run the installation file and follow on-screen instructions.
 
-R FILES AND STRUCTURE
+# R FILES AND STRUCTURE
+
 It is recommended to create a project in R (e.g., PortlandHarborProject.Rproj). Download the project file (.Rproj) and the R subfolder where the scripts are located, and the Subfolders.R file. Run first the Subfolder.R file, which will generate all the subfolders for this project. The structure of this project includes an R subfolder where all the R scripts are located, as previously indicated. There is a Data subfolder where the data are storage, and then an Output subfolder, where the results are located.
 
-DATA
+# DATA
 
 The final dataset is available at: Slade, Alexis; Martinez, Andres; Mathieu-Campbell, Martine; Watkins, Shannon; Cohen, Cassie; Hornbuckle, Keri C (2025):Airborne polychlorinated biphenyl congener concentrations using PUF-PAS from the Portland Harbor Superfund Site, Portland, OR, 2022 [dataset publication series]. [dataset].  PANGAEA, doi: https://doi.org/10.1594/PANGAEA.983837
 
