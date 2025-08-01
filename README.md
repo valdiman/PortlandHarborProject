@@ -1,17 +1,16 @@
 ## README file
+# Portland Harbor Airborne PCB Study
 
-Portland Harbor Airborne PCB Project
-This model simulates the concentration of congener-specific PCBs in both the aqueous and gas phases within laboratory-scale bioreactors containing PCB-contaminated sediment. The script incorporates experimental passive sampler measurements and uses a least-squares minimization approach to estimate congener-specific sampling rates for both passive samplers.
+The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site. These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the surrounding air of Portland. Additional scripts were developed to visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations, and analyze sample similarities using PCB congener profiles and cosine theta testing.
 
-Additionally, the model can simulate the reduction in volatile PCB release from sediment to air due to the presence of an aerobic PCB-degrading microorganism, with a known biotransformation rate for PCBs.
 
 SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
 Licenses/restrictions: licensed under the 2-Clause BSD License - see the LICENSE file for details.
 
 General Information
-Deposit Title:
+Deposit Title: Portland Harbor Airborne PCB Study
 
-This README file was generated on July 7, 2025 by Andres Martinez.
+This README file was generated on August 1, 2025 by Andres Martinez.
 
 Contributor information:
 
@@ -19,13 +18,13 @@ Andres Martinez, PhD University of Iowa - Department of Civil & Environmental En
 
 Principal Investigator: Keri Hornbuckle, PhD Principal Investigator email: keri-hornbuckle@uiowa.edu
 
-Date of Data Collection:
-
 This work was supported by the National Institutes of Environmental Health Sciences (NIEHS) grant #P42ES013661. The funding sponsor did not have any role in study design; in collection, analysis, and/or interpretation of data; in creation of the dataset; and/or in the decision to submit this data for publication or deposit it in a repository.
 
-Subject: Polychlorinated Biphenyls; Contaminant fate and transport; Paraburkholderia xenovorans LB400; Kinetic phase passive sampling; Bioremediation; Biodegradation; Biosurfactants; Bioavailability; GC-MS/MS
+This R project is part of the paper: Alexis R. Slade, Andres Martinez, Martine E. Mathieu-Campbell, Cassie Cohen, Shannon Lea Watkins, and Keri C. Hornbuckle (2025) missions, Dispersion, and Concentrations of Airborne Polychlorinated Biphenyls (PCBs) near the Portland Harbor (Oregon) Superfund Site. ES&T Air
 
-GeoLocation: The sediment used in this study was taken from a PCB-contaminated emergency overflow lagoon located in Altavista, VA (37°06'52"N, 79°16'21"W), and New Bedford Harbor, MA. Laboratory and analytical work was done at the University of Iowa in Iowa City, IA, USA.
+Subject: Polychlorinated Biphenyls; AERMOD; Portland Harbor Superfund Site; Atmospheric dispersion; Airborne PCBs; air-water flux; GC-Ms/MS; PUF air passive sampling
+
+GeoLocation: Air samplers where collected in Portland, Oregon (45.5051° N, 122.6750° W).
 
 PREREQUISITES & DEPENDENCIES
 This section of the ReadMe file lists the necessary software required to run codes in "R".
@@ -34,6 +33,7 @@ Software:
 
 Any web browser (e.g., Google Chrome, Microsoft Edge, Mozilla Firefox, etc.)
 R-studio for easily viewing, editing, and executing "R" code as a regular "R script" file: https://www.rstudio.com/products/rstudio/download/
+
 SOFTWARE INSTALLATION
 This section of the ReadMe file provides short instructions on how to download and install "R Studio". "R Studio" is an open source (no product license required) integrated development environment (IDE) for "R" and completely free to use. To install "R Studio" follow the instructions below:
 
@@ -41,8 +41,14 @@ Visit the following web address: https://www.rstudio.com/products/rstudio/downlo
 Click the "download" button beneath RStudio Desktop
 Click the button beneath "Download RStudio Desktop". This will download the correct installation file based on the operating system detected.
 Run the installation file and follow on-screen instructions.
-R FILES AND STRUCTURE
-It is recommended to create a project in R (e.g., PCB-Aerobic-Bioaugmentation-Study2.Rproj). Download the project file (.Rproj) and the R subfolder where the scripts are located, and the Subfolders.R file. Run first the Subfolder.R file, which will generate all the subfolders for this project. The structure of this project includes an R subfolder where all the R scripts are located, as previously indicated. There is a Data subfolder where the data are storage, and then an Output subfolder, where the results are located.
 
-Data
-SPME and PUF data for individual PCB4 and PCB19 can be found at https://doi.org/10.25820/data.007563. The file 06_Dataset_final_PCBmass.csv needs to be downloaded and saved in the Data folder of the project.
+R FILES AND STRUCTURE
+It is recommended to create a project in R (e.g., PortlandHarborProject.Rproj). Download the project file (.Rproj) and the R subfolder where the scripts are located, and the Subfolders.R file. Run first the Subfolder.R file, which will generate all the subfolders for this project. The structure of this project includes an R subfolder where all the R scripts are located, as previously indicated. There is a Data subfolder where the data are storage, and then an Output subfolder, where the results are located.
+
+DATA
+
+The final dataset is available at: Slade, Alexis; Martinez, Andres; Mathieu-Campbell, Martine; Watkins, Shannon; Cohen, Cassie; Hornbuckle, Keri C (2025):Airborne polychlorinated biphenyl congener concentrations using PUF-PAS from the Portland Harbor Superfund Site, Portland, OR, 2022 [dataset publication series]. [dataset].  PANGAEA, doi: https://doi.org/10.1594/PANGAEA.983837
+
+The dataset can be downloaded using the script found at 'R/ReadData/ReadAirConcentrationDataPangaea.R'.
+
+Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'. 
