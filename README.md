@@ -55,4 +55,4 @@ The final dataset is available at: Slade, Alexis; Martinez, Andres; Mathieu-Camp
 
 The dataset can be downloaded using the script found at 'R/ReadData/ReadAirConcentrationDataPangaea.R'.
 
-Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'. 
+Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts to dowload the data are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'. 
