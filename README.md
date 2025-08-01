@@ -21,6 +21,8 @@ Contributor information:
 
 Andres Martinez, PhD University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) andres-martinez@uiowa.edu ORCID: 0000-0002-0572-1494
 
+Alexis R. Slade, University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) alexis-slade@uiowa.edu ORCID: XXXX
+
 Principal Investigator: Keri Hornbuckle, PhD Principal Investigator email: keri-hornbuckle@uiowa.edu
 
 This work was supported by the National Institutes of Environmental Health Sciences (NIEHS) grant #P42ES013661. The funding sponsor did not have any role in study design; in collection, analysis, and/or interpretation of data; in creation of the dataset; and/or in the decision to submit this data for publication or deposit it in a repository.
@@ -68,4 +70,5 @@ The final dataset is available at: Slade, Alexis; Martinez, Andres; Mathieu-Camp
 The dataset can be downloaded using the script found at 'R/ReadData/ReadAirConcentrationDataPangaea.R'.
 
 Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts to dowload the data are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'. 
+
 
