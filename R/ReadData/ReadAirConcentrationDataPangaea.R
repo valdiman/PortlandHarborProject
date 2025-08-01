@@ -24,11 +24,12 @@ d.0 <- pg_data(doi = '10.1594/PANGAEA.983837')
 # 4 corresponds to airborne concentration
 d <- d.0[[4]]$data
 
-# Mdify the names of the congeners
+# Modify the names of the congeners
 names(d) <- sub(".*\\((.*)\\).*", "\\1", names(d))
 
 # Export modified dataset
 write.csv(d, file = "Data/AirConcV2.csv", row.names = FALSE)
+
 
 
 
