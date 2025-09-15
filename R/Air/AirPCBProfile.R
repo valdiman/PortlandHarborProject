@@ -8,7 +8,7 @@ install.packages("ggplot2")
 library(ggplot2)
 
 # Read data ---------------------------------------------------------------
-air.raw <- read.csv("Data/AirConcV2.csv", check.names = FALSE, header = TRUE)
+air.raw <- read.csv("Data/AirConc.csv", check.names = FALSE, header = TRUE)
 # Remove metadata
 air <- air.raw[, 7:179]
 
