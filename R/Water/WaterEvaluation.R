@@ -1,19 +1,15 @@
 # Evaluate Portland water PCB data
-# Maps and plots are not included in the paper or SI
+# Plots are not included in the paper or SI
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
 {
   install.packages("ggplot2")
-  install.packages("ggmap")
-  install.packages("ggrepel")
 }
 
 # Libraries
 {
   library(ggplot2)
-  library(ggmap) # make_bbox
-  library(ggrepel) #geom_label_repel
 }
 
 # Read data ---------------------------------------------------------------
@@ -38,166 +34,6 @@ PCB.PO$SampleDate <- as.Date(PCB.PO$SampleDate, format = "%m/%d/%y")
 PCB.PO$SampleDate2 <- as.Date(PCB.PO$SampleDate2, format = "%m/%d/%y")
 # Create date of only month & year
 PCB.PO$SampleDate2 <- format(PCB.PO$SampleDate2, "%Y-%m")
-
-# Maps --------------------------------------------------------------------
-# Map with ggmap
-# Create a square map around samples
-PO.box <- make_bbox(lon = PCB.PO$Longitude, lat = PCB.PO$Latitude,
-                    f = 0.8)
-PO.map <- get_stamenmap(bbox = PO.box, zoom = 10) # This function is not working anymore
-# Average PCB per site
-pcb4.av <- aggregate(PCB4 ~ Site + Latitude + Longitude,
-                     data = PCB.PO, FUN = mean)
-pcb11.av <- aggregate(PCB11 ~ Site, data = PCB.PO, FUN = mean)
-pcb20.28.av <- aggregate(`PCB20+28` ~ Site, data = PCB.PO, FUN = mean)
-pcb44.47.65.av <- aggregate(`PCB44+47+65` ~ Site, data = PCB.PO,
-                            FUN = mean)
-pcb45.51.av <- aggregate(`PCB45+51` ~ Site, data = PCB.PO, FUN = mean)
-pcb52.av <- aggregate(PCB52 ~ Site, data = PCB.PO, FUN = mean)
-pcb68.av <- aggregate(PCB68 ~ Site, data = PCB.PO, FUN = mean)
-tPCB.av <- aggregate(tPCB ~ Site, data = PCB.PO, FUN = mean)
-# Combine mean in one data frame
-PCB.PO.mean <- cbind(pcb4.av, pcb11.av$PCB11, pcb20.28.av$`PCB20+28`,
-                     pcb44.47.65.av$`PCB44+47+65`, pcb45.51.av$`PCB45+51`,
-                     pcb52.av$PCB52, pcb68.av$PCB68, tPCB.av$tPCB)
-# Name the columns
-colnames(PCB.PO.mean) <- c("Site", "Latitude", "Longitude", "PCB4.ave",
-                           "PCB11.ave", "PCB20+28.ave", "PCB44+47+65.ave",
-                           "PCB45+51.ave", "PCB52.ave", "PCB68.ave",
-                           "tPCB.ave")
-# (1) Map locations
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude),
-             shape = 21, color = "red",
-             fill = "white", size = 1.75, stroke = 0.75) +
-  geom_label_repel(aes(x = Longitude, y = Latitude, label = Site),
-                   data = PCB.PO.mean, family = 'Times', size = 1, 
-                   box.padding = 0.2, point.padding = 0.3,
-                   segment.color = 'grey50')
-
-# (2) Map w/average of PCB concentration
-# PCB4
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB4.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB4 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB11
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB11.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB11 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB20+28
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB20+28.ave`), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB20+28 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB44+47+65
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB44+47+65.ave`), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB44+47+65 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB45+51
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB45+51.ave`), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB45+51 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB52
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB52.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB52 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB68
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB68.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB68 \n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# tPCB
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. Total PCBs (n = 3)\n2018-2019 (pg/L)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-
-# (2) Map w/average of PCB %
-# PCB4
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB4.ave/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB4 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB11
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB11.ave/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB11 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB20+28
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB20+28.ave`/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB20+28 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB44+47+65
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB44+47+65.ave`/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB44+47+65 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB45+51
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = `PCB45+51.ave`/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB45+51 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB52
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB52.ave/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB52 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
-# PCB68
-ggmap(PO.map) +
-  geom_point(data = PCB.PO.mean, aes(x = Longitude, y = Latitude,
-                                     size = PCB68.ave/tPCB.ave), alpha = 1,
-             color  = "red") +
-  scale_size_area(name = "Ave. PCB68 \n2018-2019 (%)") +
-  xlab("Longitude") +
-  ylab("Latitude")
 
 # Spatial plot ------------------------------------------------------------
 # Concentration
@@ -552,6 +388,7 @@ ggplot(PCB.PO, aes(x = Site, y = PCB4/tPCB, shape = SampleDate2)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB11
 ggplot(PCB.PO, aes(x = Site, y = PCB11/tPCB, shape = SampleDate2)) + 
   geom_point(aes(color = SampleDate2), shape = 1, size = 2) +
@@ -582,6 +419,7 @@ ggplot(PCB.PO, aes(x = Site, y = `PCB20+28`/tPCB, shape = SampleDate2)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB44+47+65
 ggplot(PCB.PO, aes(x = Site, y = `PCB44+47+65`/tPCB, shape = SampleDate2)) + 
   geom_point(aes(color = SampleDate2), shape = 1, size = 2) +
@@ -597,6 +435,7 @@ ggplot(PCB.PO, aes(x = Site, y = `PCB44+47+65`/tPCB, shape = SampleDate2)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB45+51
 ggplot(PCB.PO, aes(x = Site, y = `PCB45+51`/tPCB, shape = SampleDate2)) + 
   geom_point(aes(color = SampleDate2), shape = 1, size = 2) +
@@ -612,6 +451,7 @@ ggplot(PCB.PO, aes(x = Site, y = `PCB45+51`/tPCB, shape = SampleDate2)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB52
 ggplot(PCB.PO, aes(x = Site, y = PCB52/tPCB, shape = SampleDate2)) + 
   geom_point(aes(color = SampleDate2), shape = 1, size = 2) +
@@ -627,6 +467,7 @@ ggplot(PCB.PO, aes(x = Site, y = PCB52/tPCB, shape = SampleDate2)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB68
 ggplot(PCB.PO, aes(x = Site, y = PCB68/tPCB, shape = SampleDate2)) + 
   geom_point(aes(color = SampleDate2), shape = 1, size = 2) +
@@ -659,6 +500,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB4)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB11
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB11)) +
   geom_point() +
@@ -673,6 +515,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB11)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB20+28
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB20+28`)) +
   geom_point() +
@@ -687,6 +530,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB20+28`)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB44+47+65
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB44+47+65`)) +
   geom_point() +
@@ -701,6 +545,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB44+47+65`)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB45+51
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB45+51`)) +
   geom_point() +
@@ -715,6 +560,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB45+51`)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB52
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB52)) +
   geom_point() +
@@ -729,6 +575,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB52)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB68
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB68)) +
   geom_point() +
@@ -743,6 +590,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB68)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # tPCB
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = tPCB)) +
   geom_point() +
@@ -773,6 +621,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB4/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB11
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB11/tPCB)) +
   geom_point() +
@@ -787,6 +636,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB11/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB20+28
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB20+28`/tPCB)) +
   geom_point() +
@@ -801,6 +651,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB20+28`/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB44+47+65
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB44+47+65`/tPCB)) +
   geom_point() +
@@ -815,6 +666,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB44+47+65`/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB45+51
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB45+51`/tPCB)) +
   geom_point() +
@@ -829,6 +681,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = `PCB45+51`/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB52
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB52/tPCB)) +
   geom_point() +
@@ -843,6 +696,7 @@ ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB52/tPCB)) +
         axis.title.x = element_text(face = "bold", size = 8)) +
   theme(axis.ticks = element_line(linewidth = 0.8, color = "black"), 
         axis.ticks.length = unit(0.2, "cm"))
+
 # PCB68
 ggplot(PCB.PO, aes(x = format(SampleDate,'%Y%m%d'), y = PCB68/tPCB)) +
   geom_point() +
