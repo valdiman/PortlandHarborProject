@@ -17,7 +17,7 @@ install.packages("SnowballC")
 
 # Read data ---------------------------------------------------------------
 # Air profiles
-prof.airV0 <- read.csv("Output/Data/csv/ProfAirV2.csv", header = TRUE,
+prof.airV0 <- read.csv("Output/Data/csv/ProfAir.csv", header = TRUE,
                      check.names = FALSE)
 
 # Water profile
@@ -25,7 +25,7 @@ prof.waterV0 <- read.csv("Output/Data/csv/AveProf3HWater.csv", header = TRUE,
                        check.names = FALSE)
 
 # Flux profile
-prof.flux <- read.csv("Output/Data/csv/ProfFluxV2.csv", header = TRUE,
+prof.flux <- read.csv("Output/Data/csv/ProfFlux.csv", header = TRUE,
                        check.names = FALSE)
 
 # Sediment PCB profile ----------------------------------------------------
