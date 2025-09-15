@@ -65,11 +65,14 @@ It is recommended to create a project in R (e.g., PortlandHarborProject.Rproj). 
 Data
 --------
 
-The final dataset is available at: Slade, Alexis; Martinez, Andres; Mathieu-Campbell, Martine; Watkins, Shannon; Cohen, Cassie; Hornbuckle, Keri C (2025):Airborne polychlorinated biphenyl congener concentrations using PUF-PAS from the Portland Harbor Superfund Site, Portland, OR, 2022 [dataset publication series]. [dataset].  PANGAEA, doi: https://doi.org/10.1594/PANGAEA.983837
+The final dataset of airborne PCB concentrations is available at: Slade, Alexis; Martinez, Andres; Mathieu-Campbell, Martine; Watkins, Shannon; Cohen, Cassie; Hornbuckle, Keri C (2025):Airborne polychlorinated biphenyl congener concentrations using PUF-PAS from the Portland Harbor Superfund Site, Portland, OR, 2022 [dataset publication series]. [dataset].  PANGAEA, doi: https://doi.org/10.1594/PANGAEA.983837
 
 The dataset can be downloaded using the script found at 'R/ReadData/ReadAirConcentrationDataPangaea.R'.
 
-Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts to dowload the data are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'. 
+Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts to dowload the data are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'.
+
+The PCB water concentration is included in the flux scripts.
+
 
 
 
