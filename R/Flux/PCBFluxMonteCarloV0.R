@@ -1,6 +1,8 @@
 # Code to estimate individual PCB fluxes from Portland Harbor
 # using 2018 and 2019 water samples from EPA
 # A Monte Carlo simulation is included
+# This code provides all water concentration options,
+# not just the top three samples
 
 # Packages and libraries needed -------------------------------------------
 # Install package

@@ -1,10 +1,12 @@
 # Code to estimate total PCB fluxes from Portland Harbor
 # using 2018 and 2019 water samples
+# This code provides all water concentration options,
+# not just the top three samples
 # The code estimate the flux of each congener, and
 # sum them to get total PCB
 # Air data are not used in these calculations
 # Monte Carlo simulation is included
-# No needs of R packages
+
 
 # Chemical properties -----------------------------------------------------
 # Read values
