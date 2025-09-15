@@ -21,7 +21,7 @@ Contributor information:
 
 Andres Martinez, PhD University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) andres-martinez@uiowa.edu ORCID: 0000-0002-0572-1494
 
-Alexis R. Slade, University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) alexis-slade@uiowa.edu ORCID: XXXX
+Alexis R. Slade, University of Iowa - Department of Civil & Environmental Engineering Iowa Superfund Research Program (ISRP) alexis-slade@uiowa.edu ORCID: 0000-0001-5492-2201
 
 Principal Investigator: Keri Hornbuckle, PhD Principal Investigator email: keri-hornbuckle@uiowa.edu
 
