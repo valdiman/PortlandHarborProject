@@ -20,7 +20,7 @@ air <- air.raw[, 7:179]
   # Add back sample site location
   prof.1 <- cbind(sid = air.raw$Event, prof)
   # Save profile data
-  write.csv(prof.1, file = "Output/Data/csv/ProfAirV2.csv")
+  write.csv(prof.1, file = "Output/Data/csv/ProfAir.csv")
   prof.ave <- data.frame(colMeans(prof, na.rm = TRUE))
   colnames(prof.ave) <- c("mean")
   prof.sd <- data.frame(apply(prof, 2, sd, na.rm = TRUE))
@@ -47,7 +47,7 @@ plotavgproferror <- ggplot(prof.ave, aes(x = congener, y = mean)) +
   ylim(0, 0.15) +
   theme_classic() +
   theme(aspect.ratio = 4/16) +
-  theme(panel.border = element_rect(color =  'black', fill = NA, size = 1.1)) +
+  theme(panel.border = element_rect(color =  'black', fill = NA, linewidth = 1.1)) +
   ylab(expression(bold("Concentration Fraction "*Sigma*"PCB"))) +
   theme(axis.text.y = element_text(face = "bold", size = 14),
         axis.title.y = element_text(face = "bold", size = 14)) +
@@ -71,7 +71,7 @@ plotavgproferror <- ggplot(prof.ave, aes(x = congener, y = mean)) +
 print(plotavgproferror)
 
 # Save plot
-ggsave("Output/Plots/AvgAirProfFig3AV2.png", plot = plotavgproferror, width = 10,
+ggsave("Output/Plots/AvgAirProfFig3A.png", plot = plotavgproferror, width = 10,
        height = 5, dpi = 500)
 
 
