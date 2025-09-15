@@ -79,4 +79,4 @@ prof <- sweep(prof.flux, 1, tmp, FUN = "/")
 # Add back sample site location
 prof.1 <- cbind(sid = "flux", prof)
 # Save profile data
-write.csv(prof.1, file = "Output/Data/csv/ProfFluxV2.csv")
+write.csv(prof.1, file = "Output/Data/csv/ProfFlux.csv")
