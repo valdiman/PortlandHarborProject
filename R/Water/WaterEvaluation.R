@@ -1,11 +1,13 @@
 # Evaluate Portland water PCB data
-# Maps and plots are not included in the paper nor SI
+# Maps and plots are not included in the paper or SI
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
-install.packages("ggplot2")
-install.packages("ggmap")
-install.packages("ggrepel")
+{
+  install.packages("ggplot2")
+  install.packages("ggmap")
+  install.packages("ggrepel")
+}
 
 # Libraries
 {
@@ -16,7 +18,7 @@ install.packages("ggrepel")
 
 # Read data ---------------------------------------------------------------
 # Read water concentrations
-wc.raw <- read.csv("Data/WaterConcentrationV02.csv")
+wc.raw <- read.csv("Data/WaterConcentration.csv")
 # Select  locations, sampling date, lat, long and PCBs
 # PCBs: 4, 11, 20+28, 44+47+65, 45+51, 52, 68 & tPCB
 PCB.PO <- data.frame(cbind(wc.raw$LocationID, wc.raw$SampleDate, wc.raw$SampleDate,
@@ -72,6 +74,7 @@ ggmap(PO.map) +
                    data = PCB.PO.mean, family = 'Times', size = 1, 
                    box.padding = 0.2, point.padding = 0.3,
                    segment.color = 'grey50')
+
 # (2) Map w/average of PCB concentration
 # PCB4
 ggmap(PO.map) +

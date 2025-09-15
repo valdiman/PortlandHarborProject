@@ -220,7 +220,7 @@ waterProfAvg <- ggplot(prof.ave, aes(x = congener, y = mean)) +
   ylim(0, 0.35) +
   theme_classic() +
   theme(aspect.ratio = 4/16) +
-  theme(panel.border = element_rect(color =  'black', fill = NA, size = 1.1)) +
+  theme(panel.border = element_rect(color =  'black', fill = NA, linewidth = 1.1)) +
   ylab(expression(bold("Concentration Fraction "*Sigma*"PCB"))) +
   theme(axis.text.y = element_text(face = "bold", size = 14),
         axis.title.y = element_text(face = "bold", size = 14)) +
