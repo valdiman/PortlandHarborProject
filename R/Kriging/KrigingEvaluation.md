@@ -57,5 +57,5 @@ PCB11 has no spatial structure in PH air. The values are randomly distributed ac
 ### What this means
 
 - Kriging is inappropriate for PCB11 - it cannot improve predictions
-- PCB11 is well-mixed in your study area (no spatial gradients)
+- PCB11 is well-mixed in PH air (no spatial gradients)
 
