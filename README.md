@@ -27,8 +27,6 @@ Principal Investigator: Keri Hornbuckle, PhD Principal Investigator email: keri-
 
 This work was supported by the National Institutes of Environmental Health Sciences (NIEHS) grant #P42ES013661. The funding sponsor did not have any role in study design; in collection, analysis, and/or interpretation of data; in creation of the dataset; and/or in the decision to submit this data for publication or deposit it in a repository.
 
-This R project is part of the paper: Alexis R. Slade, Andres Martinez, Martine E. Mathieu-Campbell, Cassie Cohen, Shannon Lea Watkins, and Keri C. Hornbuckle (2025) XXX. ES&T Air
-
 Subject: Polychlorinated Biphenyls; AERMOD; Portland Harbor Superfund Site; Atmospheric dispersion; Airborne PCBs; air-water flux; GC-Ms/MS; PUF air passive sampling
 
 GeoLocation: Air samplers where collected in Portland, Oregon (45.5051° N, 122.6750° W).
