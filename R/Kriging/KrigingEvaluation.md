@@ -44,3 +44,15 @@
 4. **Analyze residual patterns** (visual diagnostics)
 5. **Compare with null model** (mean value prediction)
 
+## Example of PCB 11 analysis
+PCB11 has no spatial structure in your dataset. The values are randomly distributed across your sampling area.
+**Key evidence** 
+Moran's I = -0.016 (p = 0.48) → No spatial autocorrelation
+R² = 0.001 → Virtually no predictive power
+NSE = -0.343 → Worse than just using the mean
+RMSE = 7.0 ng/m³ → High prediction error
+**What this means**
+Kriging is inappropriate for PCB11 - it cannot improve predictions
+PCB11 is well-mixed in your study area (no spatial gradients)
+Simple statistics are sufficient to describe PCB11 concentrations
+
