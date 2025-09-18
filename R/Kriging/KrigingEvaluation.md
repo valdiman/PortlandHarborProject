@@ -1,0 +1,62 @@
+# Create general geostatistical validation guide
+validation_guide <- "
+# Geostatistical Validation Guidelines
+
+## Interpretation Metrics for Kriging Models
+
+### 1. Spatial Autocorrelation (Moran's I)
+- **Values > 0**: Positive spatial autocorrelation (clustering)
+- **Values ≈ 0**: Random spatial distribution  
+- **Values < 0**: Negative spatial autocorrelation (dispersion)
+- **Significance**: p-value < 0.05 indicates statistically significant spatial pattern
+
+### 2. Coefficient of Determination (R²)
+- **> 0.7**: Excellent fit
+- **0.5 - 0.7**: Good fit
+- **0.3 - 0.5**: Acceptable fit (context dependent)
+- **< 0.3**: Poor fit
+
+### 3. Nash-Sutcliffe Efficiency (NSE)
+- **> 0.7**: Excellent model performance
+- **0.5 - 0.7**: Good performance
+- **0.0 - 0.5**: Acceptable performance
+- **< 0.0**: Model worse than using mean value
+
+### 4. Root Mean Square Error (RMSE)
+- **Interpretation**: Average prediction error in units of the variable
+- **Lower values** indicate better model performance
+- Should be compared to data range and standard deviation
+
+### 5. Mean Absolute Error (MAE) 
+- **Interpretation**: Average absolute prediction error
+- More robust to outliers than RMSE
+- Lower values indicate better performance
+
+### 6. Residual Analysis
+- **Residuals vs. Fitted**: Should show random scatter around zero
+- **QQ-Plot**: Residuals should follow straight line (normally distributed)
+- **Spatial Pattern**: Residuals should show no spatial autocorrelation
+- **Histogram**: Residuals should be approximately normally distributed
+
+## Step-by-Step Validation Process
+
+1. **Check spatial autocorrelation** with Moran's I
+2. **Perform cross-validation** (leave-one-out or k-fold)
+3. **Calculate performance metrics** (R², NSE, RMSE, MAE)
+4. **Analyze residual patterns** (visual diagnostics)
+5. **Compare with null model** (mean value prediction)
+
+## Common Issues and Solutions
+
+- **No spatial autocorrelation**: Use descriptive statistics instead of kriging
+- **Poor cross-validation results**: Try different variogram models or parameters
+- **Spatial patterns in residuals**: Model may be missing important spatial features
+- **Overfitting**: Simplify variogram model or reduce complexity
+
+## Recommended Tools in R
+
+- **Moran's I**: `ape::Moran.I()` or `spdep::moran.test()`
+- **Cross-validation**: `gstat::krige.cv()`
+- **Variogram fitting**: `gstat::variogram()` + `gstat::fit.variogram()`
+- **Visualization**: `ggplot2`, `sp`, `mapview`
+"
