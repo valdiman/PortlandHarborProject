@@ -46,17 +46,4 @@ validation_guide <- "
 4. **Analyze residual patterns** (visual diagnostics)
 5. **Compare with null model** (mean value prediction)
 
-## Common Issues and Solutions
-
-- **No spatial autocorrelation**: Use descriptive statistics instead of kriging
-- **Poor cross-validation results**: Try different variogram models or parameters
-- **Spatial patterns in residuals**: Model may be missing important spatial features
-- **Overfitting**: Simplify variogram model or reduce complexity
-
-## Recommended Tools in R
-
-- **Moran's I**: `ape::Moran.I()` or `spdep::moran.test()`
-- **Cross-validation**: `gstat::krige.cv()`
-- **Variogram fitting**: `gstat::variogram()` + `gstat::fit.variogram()`
-- **Visualization**: `ggplot2`, `sp`, `mapview`
 "
