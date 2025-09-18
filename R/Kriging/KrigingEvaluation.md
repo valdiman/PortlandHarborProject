@@ -1,5 +1,3 @@
-# Create general geostatistical validation guide
-validation_guide <- "
 # Geostatistical Validation Guidelines
 
 ## Interpretation Metrics for Kriging Models
@@ -46,4 +44,3 @@ validation_guide <- "
 4. **Analyze residual patterns** (visual diagnostics)
 5. **Compare with null model** (mean value prediction)
 
-"
