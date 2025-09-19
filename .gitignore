@@ -27,3 +27,5 @@
 *.json
 *.xlsx
 *.txt
+*.tif
+*.gpkg
