@@ -29,3 +29,5 @@
 *.txt
 *.tif
 *.gpkg
+*.qgz
+rosm.cache/
