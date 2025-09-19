@@ -1,22 +1,17 @@
+# Codes to perform a Kriging analysis for tPCB
+# Generated results are mapped in QGIS
 
-
-install.packages(c("gstat", "sp", "sf", "automap", "raster", "mapview", "ape",
-                   "viridis", "ggspatial"))
+install.packages(c("gstat", "sp", "sf", "raster", "ape", "viridis"))
 
 {
   library(gstat)    # Kriging functions
   library(sp)       # Spatial data handling
   library(sf)       # Modern spatial data
-  library(automap)  # Automatic variogram fitting
   library(raster)   # For spatial grids
-  library(mapview)  # Interactive mapping
   library(tidyverse)
   library(ape)
   library(viridis)
-  library(terra)
   library(ggplot2)
-  library(stars)
-  library(ggspatial)
 }
 
 # Read data ---------------------------------------------------------------
@@ -62,12 +57,12 @@ x_range <- data_bbox[1,2] - data_bbox[1,1]
 y_range <- data_bbox[2,2] - data_bbox[2,1]
 
 grid_tight <- expand.grid(
-  x = seq(data_bbox[1,1] - 0.2*x_range, 
-          data_bbox[1,2] + 0.2*x_range, 
-          length.out = 50),
-  y = seq(data_bbox[2,1] - 0.2*y_range, 
-          data_bbox[2,2] + 0.2*y_range, 
-          length.out = 50)
+  x = seq(data_bbox[1,1] - 0.05*x_range, 
+          data_bbox[1,2] + 0.05*x_range, 
+          length.out = 500),  # was 250
+  y = seq(data_bbox[2,1] - 0.05*y_range, 
+          data_bbox[2,2] + 0.05*y_range, 
+          length.out = 500)
 )
 
 coordinates(grid_tight) <- ~x + y
@@ -80,16 +75,18 @@ krige_result <- krige(tpcb ~ 1, tpcb_unique, grid_tight,
 
 krige_raster <- raster(krige_result["var1.pred"])
 
-# Check results
-plot(krige_raster, main = "tPCB Concentration Prediction")
+# Convert raster to dataframe for ggplot
+krige_df <- as.data.frame(krige_raster, xy = TRUE)
+tpcb_df  <- as.data.frame(tpcb_unique)
 
-
-
-
-
-
-
-
+ggplot() +
+  geom_raster(data = krige_df, aes(x = x, y = y, fill = var1.pred)) +
+  scale_fill_viridis_c(option = "C", na.value = NA, name = "tPCB (ng/m³)") +
+  geom_point(data = tpcb_df, aes(x = coords.x1, y = coords.x2, size = tpcb),
+             color = "blue", alpha = 0.7) +
+  theme_minimal() +
+  coord_equal() +
+  labs(title = "Kriging Prediction of tPCB Concentration")
 
 # Evaluate Kriging model --------------------------------------------------
 # Moran's I test for spatial autocorrelation
@@ -192,6 +189,14 @@ cat("R²:", round(cv_metrics_original$R2, 3), "\n")
 # Spatial Structure Present:
 # Variogram R² = 1 → Good variogram fit
 # Total PCB shows meaningful spatial gradients
+
+# Export to QGIS ----------------------------------------------------------
+# Make sure your raster is in a projected CRS or WGS84
+krige_raster_qgis <- projectRaster(krige_raster, crs = CRS("+proj=longlat +datum=WGS84"))
+writeRaster(krige_raster_qgis, "Output/GeoData/kriging_tpcb.tif", format = "GTiff", overwrite = TRUE)
+tpcb_sf <- st_as_sf(tpcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(tpcb_unique))
+tpcb_sf_wgs84 <- st_transform(tpcb_sf, 4326)
+st_write(tpcb_sf_wgs84, "Output/GeoData/tpcb_sampling_points.gpkg", delete_dsn = TRUE)
 
 
 
