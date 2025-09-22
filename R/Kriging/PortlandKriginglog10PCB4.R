@@ -104,12 +104,15 @@ krige_stack <- stack(krige_pred_wgs84, krige_var_wgs84)
 names(krige_stack) <- c("prediction", "variance")
 
 # Export to QGIS ----------------------------------------------------------
-writeRaster(krige_stack, "Output/GeoData/kriging_stackPCB4.tif",
+# Transform the data to normal scale
+krige_pred_orig <- calc(krige_pred_smooth, fun = function(x) 10^x)
+
+writeRaster(krige_pred_orig, "Output/GeoData/kriging_stackPCB4.tif",
             format = "GTiff", overwrite = TRUE)
 
 # Contours as vector
-contours <- rasterToContour(krige_pred_smooth,
-                            levels = pretty(values(krige_pred_smooth), 20))
+contours <- rasterToContour(krige_pred_orig,
+                            levels = pretty(values(krige_pred_orig), 20))
 contours_sf <- st_as_sf(contours)
 st_write(contours_sf, "Output/GeoData/kriging_contoursPCB4.gpkg",
          delete_dsn = TRUE)
