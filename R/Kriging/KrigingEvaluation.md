@@ -59,3 +59,9 @@ PCB11 has no spatial structure in PH air. The values are randomly distributed ac
 - Kriging is inappropriate for PCB11 - it cannot improve predictions
 - PCB11 is well-mixed in PH air (no spatial gradients)
 
+### Example of writting for tPCB
+The Moran’s I test indicated significant positive spatial autocorrelation (Moran’s I = 0.095, p < 0.05),
+suggesting spatial structure is present in the data. However, residual diagnostics
+(residual vs fitted, QQ-plot, histogram, spatial residual map) revealed systematic patterns
+and non-randomness, implying that the chosen variogram model does not fully capture the
+spatial variability. This points to potential model misspecification or unaccounted-for spatial trends.
