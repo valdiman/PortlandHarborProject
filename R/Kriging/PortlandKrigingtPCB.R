@@ -85,7 +85,7 @@ krige_pred_smooth <- focal(krige_pred_raster, w = matrix(1,3,3),
 krige_var_smooth  <- focal(krige_var_raster,  w = matrix(1,3,3),
                            fun = mean, na.rm = TRUE)
 
-# Porject to WGS84
+# Project to WGS84
 krige_pred_wgs84 <- projectRaster(krige_pred_smooth,
                                   crs = CRS("+proj=longlat +datum=WGS84"))
 krige_var_wgs84  <- projectRaster(krige_var_smooth, 
@@ -114,7 +114,7 @@ tpcb_df$Latitude  <- coords$coords.x2
 # Plot
 ggplot() +
   geom_raster(data = krige_df, aes(x = x, y = y, fill = tpcb_pred)) +
-  scale_fill_viridis_c(option = "C", na.value = NA, name = "tPCB (ng/m³)") +
+  scale_fill_viridis_c(option = "C", na.value = NA, name = "tPCB (pg/m³)") +
   geom_point(data = tpcb_df, aes(x = Longitude, y = Latitude, size = tpcb),
              color = "blue", alpha = 0.7) +
   theme_minimal() +
