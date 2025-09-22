@@ -25,9 +25,9 @@
 *.html
 *.xml
 *.json
-*.xlsx
 *.txt
 *.tif
 *.gpkg
 *.qgz
+*.qpt
 rosm.cache/
