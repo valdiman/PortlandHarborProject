@@ -114,7 +114,6 @@ contours_sf <- st_as_sf(contours)
 st_write(contours_sf, "Output/GeoData/kriging_contoursPCB4.gpkg",
          delete_dsn = TRUE)
 
-
 # # Map results -----------------------------------------------------------
 # Convert raster and points to data frames
 krige_df <- as.data.frame(krige_pred_smooth, xy = TRUE)
@@ -123,6 +122,11 @@ pcb_df  <- as.data.frame(pcbi_unique)
 coords <- as.data.frame(coordinates(pcbi_unique))
 pcb_df$Longitude <- coords$coords.x1
 pcb_df$Latitude  <- coords$coords.x2
+
+# Export to QGIS observations
+pcb_sf <- st_as_sf(pcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
+pcb_sf_wgs84 <- st_transform(pcb_sf, 4326)
+st_write(pcb_sf_wgs84, "Output/GeoData/pcb4_sampling_points.gpkg", delete_dsn = TRUE)
 
 # Plot
 ggplot() +
