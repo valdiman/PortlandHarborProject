@@ -1,8 +1,10 @@
 # Codes to perform a Kriging analysis for PCB 18+30
 # Generated results are mapped in QGIS
 
+# Install packages
 install.packages(c("gstat", "sp", "sf", "raster", "ape", "viridis"))
 
+# Load libraries
 {
   library(gstat)    # Kriging functions
   library(sp)       # Spatial data handling
@@ -28,31 +30,36 @@ proj4string(pcbi) <- CRS(SRS_string = "EPSG:4326")
 pcbi_utm <- spTransform(pcbi, CRS(SRS_string = "EPSG:32610"))
 
 coords_df <- as.data.frame(coordinates(pcbi_utm))
-coords_df$PCB18.30 <- pcbi_utm$PCB18.30
+coords_df$PCB18_30 <- pcbi_utm$PCB18.30
 
 unique_coords <- coords_df %>%
   group_by(coords.x1, coords.x2) %>%
-  summarise(PCB1830_mean = mean(PCB18.30, na.rm = TRUE),
+  summarise(PCB18_30_mean = mean(PCB18_30, na.rm = TRUE),
             n_samples = n(),
             .groups = "drop")
 
 pcbi_unique <- unique_coords
 coordinates(pcbi_unique) <- ~coords.x1 + coords.x2
-pcbi_unique$PCB1830 <- pcbi_unique$PCB1830_mean
+pcbi_unique$PCB18_30 <- pcbi_unique$PCB18_30_mean
 proj4string(pcbi_unique) <- proj4string(pcbi_utm)
 
-pcbi_unique$log_PCB1830 <- log10(pcbi_unique$PCB1830) # use log10 scale
+pcbi_unique$log_PCB18_30 <- log10(pcbi_unique$PCB18_30) # use log10 scale
 
-empirical_vario <- variogram(log_PCB1830 ~ 1, pcbi_unique, 
+# Variogram and model
+empirical_vario <- variogram(log_PCB18_30 ~ 1, pcbi_unique, 
                              cutoff = 10000,
                              width = 1000)
 
 manual_vario <- fit.variogram(empirical_vario, 
-                              model = vgm(psill = 1,
-                                          model = "Sph",
-                                          range = 1000,
-                                          nugget = 0.05))
+                              model = vgm(psill = 0.07,
+                                          model = "Exp",
+                                          range = 500,
+                                          nugget = 0.003),
+                              fit.sills = TRUE,
+                              fit.ranges = TRUE,
+                              fit.method = 6)
 
+# Create grid
 data_bbox <- bbox(pcbi_unique)
 x_range <- data_bbox[1,2] - data_bbox[1,1]
 y_range <- data_bbox[2,2] - data_bbox[2,1]
@@ -60,35 +67,84 @@ y_range <- data_bbox[2,2] - data_bbox[2,1]
 grid_tight <- expand.grid(
   x = seq(data_bbox[1,1] - 0.05*x_range, 
           data_bbox[1,2] + 0.05*x_range, 
-          length.out = 50),
+          length.out = 500),
   y = seq(data_bbox[2,1] - 0.05*y_range, 
           data_bbox[2,2] + 0.05*y_range, 
-          length.out = 50)
+          length.out = 500)
 )
 
 coordinates(grid_tight) <- ~x + y
 gridded(grid_tight) <- TRUE
 proj4string(grid_tight) <- proj4string(pcbi_unique)
 
-krige_result <- krige(log_PCB1830 ~ 1, pcbi_unique, grid_tight, 
+# Mask grid to convex hull
+pcb_sf <- st_as_sf(pcbi_unique)
+hull <- st_convex_hull(st_union(pcb_sf))
+hull_buffer <- st_buffer(hull, dist = 1000)  # buffer in meters
+hull_sp <- as(hull_buffer, "Spatial")
+grid_masked <- grid_tight[hull_sp, ]
+
+# Kriging
+krige_result <- krige(log_PCB18_30 ~ 1, pcbi_unique, grid_masked, 
                       model = manual_vario,
                       nmax = 10)
 
-krige_result$pred_original <- 10^krige_result$var1.pred
-krige_raster <- raster(krige_result["pred_original"])
+# Convert to raster
+krige_pred_raster <- raster(krige_result["var1.pred"])
+krige_var_raster  <- raster(krige_result["var1.var"])
 
-# Convert raster to dataframe for ggplot
-krige_df <- as.data.frame(krige_raster, xy = TRUE)
-pcb1830_df  <- as.data.frame(pcbi_unique)
+# Smoothing
+krige_pred_smooth <- focal(krige_pred_raster, w = matrix(1,3,3),
+                           fun = mean, na.rm = TRUE)
+krige_var_smooth  <- focal(krige_var_raster,  w = matrix(1,3,3),
+                           fun = mean, na.rm = TRUE)
 
+# Project to WGS84
+krige_pred_wgs84 <- projectRaster(krige_pred_smooth,
+                                  crs = CRS("+proj=longlat +datum=WGS84"))
+krige_var_wgs84  <- projectRaster(krige_var_smooth, 
+                                  crs = CRS("+proj=longlat +datum=WGS84"))
+
+krige_stack <- stack(krige_pred_wgs84, krige_var_wgs84)
+names(krige_stack) <- c("prediction", "variance")
+
+# Export to QGIS ----------------------------------------------------------
+# Transform the data to normal scale
+krige_pred_orig <- calc(krige_pred_smooth, fun = function(x) 10^x)
+
+writeRaster(krige_pred_orig, "Output/GeoData/PCB18.30_Kriging_Stack.tif",
+            format = "GTiff", overwrite = TRUE)
+
+# Contours as vector
+contours <- rasterToContour(krige_pred_orig,
+                            levels = pretty(values(krige_pred_orig), 20))
+contours_sf <- st_as_sf(contours)
+st_write(contours_sf, "Output/GeoData/PCB18.30_Kriging_Contours.gpkg",
+         delete_dsn = TRUE)
+
+# # Map results -----------------------------------------------------------
+# Convert raster and points to data frames
+krige_df <- as.data.frame(krige_pred_smooth, xy = TRUE)
+names(krige_df)[3] <- "pcb_pred"
+pcb_df  <- as.data.frame(pcbi_unique)
+coords <- as.data.frame(coordinates(pcbi_unique))
+pcb_df$Longitude <- coords$coords.x1
+pcb_df$Latitude  <- coords$coords.x2
+
+# Export to QGIS observations
+pcb_sf <- st_as_sf(pcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
+pcb_sf_wgs84 <- st_transform(pcb_sf, 4326)
+st_write(pcb_sf_wgs84, "Output/GeoData/PCB18.30_Sampling_Points.gpkg", delete_dsn = TRUE)
+
+# Plot
 ggplot() +
-  geom_raster(data = krige_df, aes(x = x, y = y, fill = pred_original)) +
-  scale_fill_viridis_c(option = "C", na.value = NA, name = "PCBs 18+30 (pg/m³)") +
-  geom_point(data = pcb1830_df, aes(x = coords.x1, y = coords.x2, size = PCB1830_mean),
+  geom_raster(data = krige_df, aes(x = x, y = y, fill = 10^(pcb_pred))) +
+  scale_fill_viridis_c(option = "C", na.value = NA, name = "PCB 18+30 (pg/m³)") +
+  geom_point(data = pcb_df, aes(x = Longitude, y = Latitude, size = PCB18_30),
              color = "blue", alpha = 0.7) +
   theme_minimal() +
   coord_equal() +
-  labs(title = "Kriging Prediction of PCBs 18 + 30 Concentration")
+  labs(title = "Kriging Prediction of PCBs 18+30 Concentration")
 
 # Evaluate Kriging model --------------------------------------------------
 # Moran's I test for spatial autocorrelation
@@ -97,12 +153,12 @@ dist_mat <- as.matrix(dist(coords))
 dist_inv <- 1/dist_mat
 diag(dist_inv) <- 0
 
-moran_test <- Moran.I(pcbi_unique$PCB1830, dist_inv)
+moran_test <- Moran.I(pcbi_unique$PCB18_30, dist_inv)
 print("Moran's I test for spatial autocorrelation:")
 print(moran_test)
 
 # Leave-one-out cross-validation
-krige_cv <- krige.cv(log_PCB1830 ~ 1, pcbi_unique, manual_vario)
+krige_cv <- krige.cv(log_PCB18_30 ~ 1, pcbi_unique, manual_vario)
 
 # Calculate performance metrics
 cv_metrics <- data.frame(
@@ -179,15 +235,4 @@ cat("R²:", round(cv_metrics_original$R2, 3), "\n")
 # R²: > 0.7 = good fit, > 0.5 = acceptable
 # NSE: > 0.7 = good, > 0.5 = acceptable
 # Residuals: Should be randomly distributed without spatial patterns
-
-# Export to QGIS ----------------------------------------------------------
-# Make sure your raster is in a projected CRS or WGS84
-krige_raster_qgis <- projectRaster(krige_raster, crs = CRS("+proj=longlat +datum=WGS84"))
-writeRaster(krige_raster_qgis, "Output/GeoData/kriging_pcb1830.tif", format = "GTiff", overwrite = TRUE)
-pcb1830_sf <- st_as_sf(pcb1830_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
-pcb1830_sf_wgs84 <- st_transform(pcb1830_sf, 4326)
-st_write(pcb1830_sf_wgs84, "Output/GeoData/pcb1830_sampling_points.gpkg", delete_dsn = TRUE)
-
-
-
 

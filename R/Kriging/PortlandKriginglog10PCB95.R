@@ -1,8 +1,10 @@
 # Codes to perform a Kriging analysis for PCB 95
 # Generated results are mapped in QGIS
 
+# Install packages
 install.packages(c("gstat", "sp", "sf", "raster", "ape", "viridis"))
 
+# Load libraries
 {
   library(gstat)    # Kriging functions
   library(sp)       # Spatial data handling
@@ -43,16 +45,20 @@ proj4string(pcbi_unique) <- proj4string(pcbi_utm)
 
 pcbi_unique$log_PCB95 <- log10(pcbi_unique$PCB95) # use log10 scale
 
+# Variogram and model
 empirical_vario <- variogram(log_PCB95 ~ 1, pcbi_unique, 
                              cutoff = 10000,
                              width = 1000)
 
 manual_vario <- fit.variogram(empirical_vario, 
-                              model = vgm(psill = 0.5,
+                              model = vgm(psill = 0.15,
                                           model = "Sph",
-                                          range = 1000,
-                                          nugget = 0.05))
+                                          range = 5000,
+                                          nugget = 0.077))
 
+# Data do not show any detectable spatial correlation at the distances sampled
+
+# Create grid
 data_bbox <- bbox(pcbi_unique)
 x_range <- data_bbox[1,2] - data_bbox[1,1]
 y_range <- data_bbox[2,2] - data_bbox[2,1]
@@ -60,31 +66,80 @@ y_range <- data_bbox[2,2] - data_bbox[2,1]
 grid_tight <- expand.grid(
   x = seq(data_bbox[1,1] - 0.05*x_range, 
           data_bbox[1,2] + 0.05*x_range, 
-          length.out = 50),
+          length.out = 500),
   y = seq(data_bbox[2,1] - 0.05*y_range, 
           data_bbox[2,2] + 0.05*y_range, 
-          length.out = 50)
+          length.out = 500)
 )
 
 coordinates(grid_tight) <- ~x + y
 gridded(grid_tight) <- TRUE
 proj4string(grid_tight) <- proj4string(pcbi_unique)
 
-krige_result <- krige(log_PCB95 ~ 1, pcbi_unique, grid_tight, 
+# Mask grid to convex hull
+pcb_sf <- st_as_sf(pcbi_unique)
+hull <- st_convex_hull(st_union(pcb_sf))
+hull_buffer <- st_buffer(hull, dist = 1000)  # buffer in meters
+hull_sp <- as(hull_buffer, "Spatial")
+grid_masked <- grid_tight[hull_sp, ]
+
+# Kriging
+krige_result <- krige(log_PCB95 ~ 1, pcbi_unique, grid_masked, 
                       model = manual_vario,
                       nmax = 10)
 
-krige_result$pred_original <- 10^krige_result$var1.pred
-krige_raster <- raster(krige_result["pred_original"])
+# Convert to raster
+krige_pred_raster <- raster(krige_result["var1.pred"])
+krige_var_raster  <- raster(krige_result["var1.var"])
 
-# Convert raster to dataframe for ggplot
-krige_df <- as.data.frame(krige_raster, xy = TRUE)
-pcb95_df  <- as.data.frame(pcbi_unique)
+# Smoothing
+krige_pred_smooth <- focal(krige_pred_raster, w = matrix(1,3,3),
+                           fun = mean, na.rm = TRUE)
+krige_var_smooth  <- focal(krige_var_raster,  w = matrix(1,3,3),
+                           fun = mean, na.rm = TRUE)
 
+# Project to WGS84
+krige_pred_wgs84 <- projectRaster(krige_pred_smooth,
+                                  crs = CRS("+proj=longlat +datum=WGS84"))
+krige_var_wgs84  <- projectRaster(krige_var_smooth, 
+                                  crs = CRS("+proj=longlat +datum=WGS84"))
+
+krige_stack <- stack(krige_pred_wgs84, krige_var_wgs84)
+names(krige_stack) <- c("prediction", "variance")
+
+# Export to QGIS ----------------------------------------------------------
+# Transform the data to normal scale
+krige_pred_orig <- calc(krige_pred_smooth, fun = function(x) 10^x)
+
+writeRaster(krige_pred_orig, "Output/GeoData/PCB95_Kriging_Stack.tif",
+            format = "GTiff", overwrite = TRUE)
+
+# Contours as vector
+contours <- rasterToContour(krige_pred_orig,
+                            levels = pretty(values(krige_pred_orig), 20))
+contours_sf <- st_as_sf(contours)
+st_write(contours_sf, "Output/GeoData/PCB95_Kriging_Contours.gpkg",
+         delete_dsn = TRUE)
+
+# # Map results -----------------------------------------------------------
+# Convert raster and points to data frames
+krige_df <- as.data.frame(krige_pred_smooth, xy = TRUE)
+names(krige_df)[3] <- "pcb_pred"
+pcb_df  <- as.data.frame(pcbi_unique)
+coords <- as.data.frame(coordinates(pcbi_unique))
+pcb_df$Longitude <- coords$coords.x1
+pcb_df$Latitude  <- coords$coords.x2
+
+# Export to QGIS observations
+pcb_sf <- st_as_sf(pcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
+pcb_sf_wgs84 <- st_transform(pcb_sf, 4326)
+st_write(pcb_sf_wgs84, "Output/GeoData/PCB95_Sampling_Points.gpkg", delete_dsn = TRUE)
+
+# Plot
 ggplot() +
-  geom_raster(data = krige_df, aes(x = x, y = y, fill = pred_original)) +
+  geom_raster(data = krige_df, aes(x = x, y = y, fill = 10^(pcb_pred))) +
   scale_fill_viridis_c(option = "C", na.value = NA, name = "PCB 95 (pg/m³)") +
-  geom_point(data = pcb95_df, aes(x = coords.x1, y = coords.x2, size = PCB95_mean),
+  geom_point(data = pcb_df, aes(x = Longitude, y = Latitude, size = PCB95),
              color = "blue", alpha = 0.7) +
   theme_minimal() +
   coord_equal() +

@@ -1,8 +1,10 @@
 # Codes to perform a Kriging analysis for tPCB
 # Generated results are mapped in QGIS
 
+# Install packages
 install.packages(c("gstat", "sp", "sf", "raster", "ape", "viridis"))
 
+# Load libraries
 {
   library(gstat)    # Kriging functions
   library(sp)       # Spatial data handling
@@ -95,12 +97,12 @@ krige_stack <- stack(krige_pred_wgs84, krige_var_wgs84)
 names(krige_stack) <- c("prediction", "variance")
 
 # Export to QGIS ----------------------------------------------------------
-writeRaster(krige_stack, "Output/GeoData/kriging_stack.tif", format = "GTiff", overwrite = TRUE)
+writeRaster(krige_stack, "Output/GeoData/tPCB_Kriging_Stack.tif", format = "GTiff", overwrite = TRUE)
 
 # Contours as vector
 contours <- rasterToContour(krige_pred_smooth, levels = pretty(values(krige_pred_smooth), 20))
 contours_sf <- st_as_sf(contours)
-st_write(contours_sf, "Output/GeoData/kriging_contours2.gpkg", delete_dsn = TRUE)
+st_write(contours_sf, "Output/GeoData/tPCB_Kriging_Contours.gpkg", delete_dsn = TRUE)
 
 # # Map results -----------------------------------------------------------
 # Convert raster and points to data frames
@@ -114,7 +116,7 @@ tpcb_df$Latitude  <- coords$coords.x2
 # Export to QGIS observations
 tpcb_sf <- st_as_sf(tpcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(tpcb_unique))
 tpcb_sf_wgs84 <- st_transform(tpcb_sf, 4326)
-st_write(tpcb_sf_wgs84, "Output/GeoData/tpcb_sampling_points.gpkg", delete_dsn = TRUE)
+st_write(tpcb_sf_wgs84, "Output/GeoData/tPCB_Sampling_Points.gpkg", delete_dsn = TRUE)
 
 # Plot
 ggplot() +

@@ -1,8 +1,10 @@
 # Codes to perform a Kriging analysis for PCB 4
 # Generated results are mapped in QGIS
 
+# Install packages
 install.packages(c("gstat", "sp", "sf", "raster", "ape", "viridis"))
 
+# Load libraries
 {
   library(gstat)    # Kriging functions
   library(sp)       # Spatial data handling
@@ -107,14 +109,14 @@ names(krige_stack) <- c("prediction", "variance")
 # Transform the data to normal scale
 krige_pred_orig <- calc(krige_pred_smooth, fun = function(x) 10^x)
 
-writeRaster(krige_pred_orig, "Output/GeoData/kriging_stackPCB4.tif",
+writeRaster(krige_pred_orig, "Output/GeoData/PCB4_Kriging_Stack.tif",
             format = "GTiff", overwrite = TRUE)
 
 # Contours as vector
 contours <- rasterToContour(krige_pred_orig,
                             levels = pretty(values(krige_pred_orig), 20))
 contours_sf <- st_as_sf(contours)
-st_write(contours_sf, "Output/GeoData/kriging_contoursPCB4.gpkg",
+st_write(contours_sf, "Output/GeoData/PCB4_Kriging_Contours.gpkg",
          delete_dsn = TRUE)
 
 # # Map results -----------------------------------------------------------
@@ -129,7 +131,7 @@ pcb_df$Latitude  <- coords$coords.x2
 # Export to QGIS observations
 pcb_sf <- st_as_sf(pcb_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
 pcb_sf_wgs84 <- st_transform(pcb_sf, 4326)
-st_write(pcb_sf_wgs84, "Output/GeoData/pcb4_sampling_points.gpkg", delete_dsn = TRUE)
+st_write(pcb_sf_wgs84, "Output/GeoData/PCB4_Sampling_Points.gpkg", delete_dsn = TRUE)
 
 # Plot
 ggplot() +
