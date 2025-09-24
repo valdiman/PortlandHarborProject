@@ -233,14 +233,5 @@ cat("R²:", round(cv_metrics_original$R2, 3), "\n")
 # NSE: > 0.7 = good, > 0.5 = acceptable
 # Residuals: Should be randomly distributed without spatial patterns
 
-# Export to QGIS ----------------------------------------------------------
-# Make sure your raster is in a projected CRS or WGS84
-krige_raster_qgis <- projectRaster(krige_raster, crs = CRS("+proj=longlat +datum=WGS84"))
-writeRaster(krige_raster_qgis, "Output/GeoData/kriging_pcb4.tif", format = "GTiff", overwrite = TRUE)
-pcb4_sf <- st_as_sf(pcb4_df, coords = c("coords.x1", "coords.x2"), crs = st_crs(pcbi_unique))
-pcb4_sf_wgs84 <- st_transform(pcb4_sf, 4326)
-st_write(pcb4_sf_wgs84, "Output/GeoData/pcb4_sampling_points.gpkg", delete_dsn = TRUE)
-
-
 
 
