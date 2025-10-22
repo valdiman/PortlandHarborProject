@@ -101,4 +101,3 @@ p.toc
 # Save plot
 ggsave("Output/Plots/TOC.jpg", plot = p.toc,
        width = 4, height = 10, dpi = 500)
-
