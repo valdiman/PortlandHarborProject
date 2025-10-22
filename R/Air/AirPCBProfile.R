@@ -3,9 +3,11 @@
 # Packages and libraries needed --------------------------------------------
 # Install packages
 install.packages("ggplot2")
+install.packages("dplyr")
 
 # Libraries
 library(ggplot2)
+library(dplyr)
 
 # Read data ---------------------------------------------------------------
 air.raw <- read.csv("Data/AirConc.csv", check.names = FALSE, header = TRUE)
@@ -74,4 +76,29 @@ print(plotavgproferror)
 ggsave("Output/Plots/AvgAirProfFig3A.png", plot = plotavgproferror, width = 10,
        height = 5, dpi = 500)
 
+# Box plot for tPCB -------------------------------------------------------
+# TOC
+p.toc <- ggplot(air.tPCB, aes(x = "", y = tPCB)) +
+  geom_boxplot(color = "black", alpha = 0.8, outlier.shape = NA) +
+  geom_jitter(width = 0, alpha = 0.6, shape = 21, size = 3.5, stroke = 1.2) +
+  labs(
+    y = expression(bold("Air Concentration  " * Sigma * "PCB (pg/m"^3 * ")")),
+    x = NULL) +
+  theme_bw() +
+  theme(
+    aspect.ratio = 6/1,
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(face = "bold", size = 21),
+    axis.title.y = element_text(face = "bold", size = 23),
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.line = element_line(color = "black")
+  )
+
+# See plot
+p.toc
+
+# Save plot
+ggsave("Output/Plots/TOC.jpg", plot = p.toc,
+       width = 4, height = 10, dpi = 500)
 
