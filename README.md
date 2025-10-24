@@ -1,7 +1,7 @@
 ## README file
 # Portland Harbor Airborne PCB Study
 
-The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site. These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the surrounding air of Portland. Additional scripts were developed to visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations, and analyze sample similarities using PCB congener profiles and cosine theta testing.
+The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site. These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the surrounding air of Portland. Additional scripts were developed to perform kriging modeling for spatial interpolation of PCB concentrations, visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations, and analyze sample similarities using PCB congener profiles and cosine theta testing.
 
 --------------------------
 SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
@@ -69,7 +69,8 @@ The dataset can be downloaded using the script found at 'R/ReadData/ReadAirConce
 
 Air, water temperatures and wind speed were obtained from USGS and NOAA stations. The scripts to dowload the data are found in 'R/ReadData/ReadNOAAData.R' and 'R/ReadData/ReadUSGGData.R'.
 
-The PCB water concentration is included in the flux scripts.
+The PCB water concentrations and the phycical-chemical properties of the individual and coeluting congeners are included in the flux scripts.
+
 
 
 
