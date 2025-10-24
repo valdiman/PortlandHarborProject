@@ -6,8 +6,10 @@ install.packages("ggplot2")
 install.packages("dplyr")
 
 # Libraries
-library(ggplot2)
-library(dplyr)
+{
+  library(ggplot2)
+  library(dplyr)
+}
 
 # Read data ---------------------------------------------------------------
 air.raw <- read.csv("Data/AirConc.csv", check.names = FALSE, header = TRUE)
@@ -77,6 +79,9 @@ ggsave("Output/Plots/AvgAirProfFig3A.png", plot = plotavgproferror, width = 10,
        height = 5, dpi = 500)
 
 # Box plot for tPCB -------------------------------------------------------
+air.tPCB <- as.data.frame(rowSums(air))
+colnames(air.tPCB) <- "tPCB"
+
 # TOC
 p.toc <- ggplot(air.tPCB, aes(x = "", y = tPCB)) +
   geom_boxplot(color = "black", alpha = 0.8, outlier.shape = NA) +
@@ -88,8 +93,8 @@ p.toc <- ggplot(air.tPCB, aes(x = "", y = tPCB)) +
   theme(
     aspect.ratio = 6/1,
     axis.text.x = element_blank(),
-    axis.text.y = element_text(face = "bold", size = 21),
-    axis.title.y = element_text(face = "bold", size = 23),
+    axis.text.y = element_text(face = "bold", size = 34),
+    axis.title.y = element_text(face = "bold", size = 35),
     panel.border = element_blank(),
     panel.grid = element_blank(),
     axis.line = element_line(color = "black")
@@ -99,5 +104,5 @@ p.toc <- ggplot(air.tPCB, aes(x = "", y = tPCB)) +
 p.toc
 
 # Save plot
-ggsave("Output/Plots/TOC.jpg", plot = p.toc,
+ggsave("Output/Plots/TOC2.jpg", plot = p.toc,
        width = 4, height = 10, dpi = 500)
