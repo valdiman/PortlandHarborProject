@@ -1,5 +1,6 @@
 # Code to estimate individual PCB fluxes from Portland Harbor
 # using 2018 and 2019 water samples from EPA
+# Air data are not used in these calculations
 # A Monte Carlo simulation is included
 # This is the code used for the paper
 
@@ -497,5 +498,6 @@ ggplot(final.result, aes(x = Congener, y = `Mean (ng/m2/d)`)) +
            size = 2.5, fontface = 1, angle = 90) +
   annotate("text", x = 57, y = 70, label = "PCB 68",
            size = 2.5, fontface = 1, angle = 90)
+
 
 
