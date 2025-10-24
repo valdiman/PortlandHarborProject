@@ -105,5 +105,5 @@ p.toc <- ggplot(air.tPCB, aes(x = "", y = tPCB)) +
 p.toc
 
 # Save plot
-ggsave("Output/Plots/TOC2.jpg", plot = p.toc,
+ggsave("Output/Plots/TOC.jpg", plot = p.toc,
        width = 4, height = 10, dpi = 500)
