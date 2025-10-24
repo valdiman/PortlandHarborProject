@@ -79,6 +79,7 @@ ggsave("Output/Plots/AvgAirProfFig3A.png", plot = plotavgproferror, width = 10,
        height = 5, dpi = 500)
 
 # Box plot for tPCB -------------------------------------------------------
+# This plot is included in the TOC of the paper.
 air.tPCB <- as.data.frame(rowSums(air))
 colnames(air.tPCB) <- "tPCB"
 
