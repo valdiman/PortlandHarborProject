@@ -1,5 +1,5 @@
-# Script to calculate Cosine theta for the air samples.
-# average water profile, sediment profile and Aroclors
+# Script to calculate Cosine theta for the air samples,
+# average water profile, sediment profile and selected Aroclors.
 
 # Packages and libraries needed --------------------------------------------
 # Install packages
