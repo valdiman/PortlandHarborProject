@@ -45,7 +45,7 @@
 5. **Compare with null model** (mean value prediction)
 
 ## Example of PCB 11 analysis
-PCB11 has no spatial structure in PH air. The values are randomly distributed across your sampling area.
+PCB11 has no spatial structure in PH air. The values are randomly distributed across sampling area.
 
 ### Key evidence
 
@@ -58,3 +58,4 @@ PCB11 has no spatial structure in PH air. The values are randomly distributed ac
 
 - Kriging is inappropriate for PCB11 - it cannot improve predictions
 - PCB11 is well-mixed in PH air (no spatial gradients)
+
