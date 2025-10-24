@@ -4,7 +4,7 @@
 # sum them to get total PCB
 # Air data are not used in these calculations
 # Monte Carlo simulation is included
-# No needs of R packages
+# This is the code used for the paper
 
 # Chemical properties -----------------------------------------------------
 cp <- data.frame(
@@ -415,7 +415,6 @@ final.result = function(MW.PCB, H0.mean, H0.error,
 }
 
 # Final calculations ------------------------------------------------------
-
 Num.Congener <- length(Congener)
 
 result <- NULL
@@ -450,3 +449,4 @@ print(tPCBFlux)
   abline(v = quantile(as.numeric(final.result[,1]), 0.975), col = "red", lwd = 3)
   abline(v = 0, col = "black", lwd = 3)
 }
+
