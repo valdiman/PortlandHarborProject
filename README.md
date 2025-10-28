@@ -1,7 +1,11 @@
 ## README file
 # Portland Harbor Airborne PCB Study
 
-The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site. These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the surrounding air of Portland. Additional scripts were developed to perform kriging modeling for spatial interpolation of PCB concentrations, visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations, and analyze sample similarities using PCB congener profiles and cosine theta testing.
+The scripts presented here were developed to predict airborne PCB emissions from the waters of the Portland Harbor Superfund Site.
+These estimated emissions are then used as input sources in AERMOD to model the dispersion and concentrations of PCBs in the
+surrounding air of Portland. Additional scripts were developed to perform kriging modeling for spatial interpolation of PCB
+concentrations, visualize the data through plots, build a distance-from-water model to predict airborne PCB concentrations,
+and analyze sample similarities using PCB congener profiles and cosine theta testing.
 
 --------------------------
 SHARING/ACCESS/ATTRIBUTION LICENSE INFORMATION
